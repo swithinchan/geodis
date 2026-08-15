@@ -1,0 +1,31 @@
+officer_name,officer_address,site_name,site_address,walking_cost,walking_distance_m,straight_line_m
+Officer_05,"Flat 21, Floor 7, Belcher Gardens, Des Voeux Road West",TPU-152-Site-068,"Block G, Floor 2, Wah Fung Building, Western Street",1.3,1.3,1.3
+Officer_08,"Flat 40, Floor 1, Yue Sun Mansion, Victoria Road",TPU-861-Site-005,"Block G, Floor 29, Kwun Lung Lau, Eastern Street",2.8,2.8,2.8
+Officer_15,"Flat 33, Floor 16, Imperial Kennedy, Praya, Kennedy Town",TPU-228-Site-043,"Block E, Floor 18, Imperial Kennedy, Queen's Road West",5.8,5.8,2.8
+Officer_09,"Flat 17, Floor 14, Belcher Gardens, Catchick Street",TPU-636-Site-200,"Block B, Floor 30, Kennedy Town Centre, Harcourt Road",6.4,6.4,3.4
+Officer_21,"Flat 31, Floor 3, Scholar Court, Western Street",TPU-583-Site-145,"Block B, Floor 29, Greenvale, Belcher's Street",8.8,8.8,7.3
+Officer_27,"Flat 12, Floor 9, Imperial Kennedy, Victoria Road",TPU-882-Site-067,"Block F, Floor 9, Greenvale, Forbes Street",13.0,13.0,11.6
+Officer_11,"Flat 19, Floor 16, Kennedy Town Centre, Centre Street",TPU-112-Site-197,"Block G, Floor 1, Belcher Gardens, Victoria Road",13.8,13.8,13.6
+Officer_10,"Flat 39, Floor 34, Manhattan Heights, Forbes Street",TPU-951-Site-039,"Block A, Floor 17, Kwun Lung Lau, Forbes Street",14.4,14.4,9.0
+Officer_17,"Flat 16, Floor 27, Wah Fung Building, Sand Street",TPU-152-Site-172,"Block D, Floor 18, Kennedy Town Centre, Eastern Street",15.6,15.6,11.2
+Officer_19,"Flat 34, Floor 35, Kennedy Town Centre, Eastern Street",TPU-854-Site-119,"Block A, Floor 6, Lexington Hill, Connaught Road West",18.9,18.9,12.8
+Officer_06,"Flat 10, Floor 9, Wah Fung Building, Hau Wo Street",TPU-880-Site-133,"Block D, Floor 16, Greenvale, Pok Fu Lam Road",21.3,21.3,13.5
+Officer_07,"Flat 31, Floor 9, Ka On Building, Belcher's Street",TPU-638-Site-035,"Block H, Floor 23, Kwun Lung Lau, Hill Road",22.2,22.2,20.8
+Officer_28,"Flat 30, Floor 3, Lexington Hill, Catchick Street",TPU-354-Site-059,"Block G, Floor 20, Scholar Court, Western Street",25.4,25.4,25.4
+Officer_14,"Flat 32, Floor 35, Kennedy Town Centre, Catchick Street",TPU-483-Site-147,"Block G, Floor 21, High West, Forbes Street",27.1,27.1,27.1
+Officer_24,"Flat 7, Floor 22, Lexington Hill, Des Voeux Road West",TPU-348-Site-170,"Block G, Floor 5, Manhattan Heights, Pok Fu Lam Road",27.6,27.6,19.4
+Officer_26,"Flat 12, Floor 30, Scholar Court, Water Street",TPU-394-Site-097,"Block E, Floor 18, Wah Fung Building, Victoria Road",32.5,32.5,24.7
+Officer_03,"Flat 33, Floor 24, Kwun Lung Lau, Belcher's Street",TPU-577-Site-181,"Block H, Floor 17, Wah Fung Building, Connaught Road West",34.1,34.1,26.4
+Officer_25,"Flat 23, Floor 35, Belcher Gardens, Forbes Street",TPU-348-Site-103,"Block D, Floor 4, Smithfield Court, Connaught Road West",44.1,44.1,43.7
+Officer_18,"Flat 6, Floor 34, Imperial Kennedy, Harcourt Road",TPU-928-Site-117,"Block D, Floor 9, Yue Sun Mansion, Mount Davis Road",46.4,46.4,44.0
+Officer_04,"Flat 6, Floor 24, Kwun Lung Lau, Des Voeux Road West",TPU-189-Site-027,"Block H, Floor 23, Greenvale, Harcourt Road",61.0,61.0,59.0
+Officer_29,"Flat 3, Floor 13, Lung Cheung Court, Hill Road",TPU-996-Site-154,"Block D, Floor 9, Smithfield Court, Eastern Street",62.2,62.2,19.9
+Officer_02,"Flat 2, Floor 27, Greenvale, Eastern Street",TPU-658-Site-009,"Block C, Floor 14, Kennedy Town Centre, Centre Street",62.9,62.9,47.1
+Officer_13,"Flat 40, Floor 30, Imperial Kennedy, Centre Street",TPU-268-Site-040,"Block E, Floor 5, Manhattan Heights, Davis Street",75.9,75.9,62.1
+Officer_01,"Flat 15, Floor 29, Kennedy Town Centre, Centre Street",TPU-305-Site-031,"Block B, Floor 8, Manhattan Heights, Eastern Street",106.2,106.2,101.9
+Officer_20,"Flat 33, Floor 2, High West, Mount Davis Road",TPU-541-Site-066,"Block B, Floor 28, Belcher Gardens, Pok Fu Lam Road",110.2,110.2,98.2
+Officer_16,"Flat 28, Floor 1, Ka On Building, Forbes Street",TPU-882-Site-070,"Block H, Floor 13, Kennedy Town Centre, Hill Road",578.2,578.2,313.4
+Officer_22,"Flat 24, Floor 17, Kwun Lung Lau, Hau Wo Street",TPU-392-Site-002,"Block D, Floor 21, High West, Belcher's Street",1000000000000000000.0,1000000000000000000.0,890.2
+Officer_23,"Flat 5, Floor 23, Wah Fung Building, Praya, Kennedy Town",TPU-986-Site-003,"Block A, Floor 25, Scholar Court, Eastern Street",1000000000000000000.0,1000000000000000000.0,1013.8
+Officer_30,"Flat 20, Floor 33, Wah Fung Building, Belcher's Street",TPU-918-Site-004,"Block B, Floor 9, Wah Fung Building, Hau Wo Street",1000000000000000000.0,1000000000000000000.0,694.8
+Officer_12,"Flat 4, Floor 16, Kennedy Town Centre, Hill Road",TPU-359-Site-001,"Block H, Floor 18, Scholar Court, Western Street",1000000000000000000.0,1000000000000000000.0,1227.6

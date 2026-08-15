@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>geodis — 3D Pedestrian Network · Hong Kong</title>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#080c14;color:#c8d6e5;overflow:hidden;height:100vh;display:flex}
+#side{width:380px;min-width:380px;background:#0c1220;display:flex;flex-direction:column;border-right:1px solid #1a2740;z-index:10}
+#sh{padding:14px 16px;background:#0a1020;border-bottom:1px solid #1a2740}
+#sh h2{color:#f0729a;font-size:15px;letter-spacing:-.3px}
+#sh .sub{font-size:10px;opacity:.5;margin-top:2px}
+#ctls{padding:7px 10px;display:flex;gap:4px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #1a2740;font-size:10px}
+#ctls select{flex:1;min-width:0;padding:4px 6px;border-radius:3px;border:1px solid #1e3050;background:#111d30;color:#c8d6e5;font-size:11px}
+#ctls button{padding:4px 9px;border-radius:3px;border:none;background:#f0729a;color:#0c1220;font-weight:bold;cursor:pointer;font-size:10px;white-space:nowrap}
+#ctls button:hover{background:#e85d87}
+#ctls label{cursor:pointer;display:flex;align-items:center;gap:2px;user-select:none;white-space:nowrap}
+#ctls input[type=checkbox]{accent-color:#f0729a;transform:scale(.8)}
+#ctls input[type=range]{width:50px;accent-color:#f0729a}
+#list{flex:1;overflow-y:auto;padding:4px 0}
+.card{margin:3px 7px;padding:8px 11px;background:#111d30;border-radius:5px;cursor:pointer;border:1px solid transparent;transition:all .12s}
+.card:hover{border-color:#f0729a;background:#152238}
+.card.active{border-color:#f0729a;box-shadow:0 0 8px rgba(240,114,154,.1)}
+.card .nm{font-weight:700;font-size:12px;color:#f0729a}
+.card .ad{font-size:10px;opacity:.55;margin:2px 0}
+.card .st{font-size:10px;opacity:.4}
+.card .it{margin-top:5px}
+.card .stop{display:flex;align-items:flex-start;gap:6px;margin:2px 0;padding:4px 7px;background:rgba(8,12,20,.45);border-radius:4px;font-size:10px}
+.card .stop .n{background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.card .stop .sn{font-weight:700;color:#fca5a5}
+.card .stop .sa{font-size:9px;opacity:.45;margin-top:1px}
+.card .stop .sc{color:#4ade80;font-weight:700;white-space:nowrap;font-size:11px}
+.card .home{font-size:10px;padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.06);margin-bottom:3px}
+.card .dirbtn{margin:4px 0 2px;padding:2px 7px;font-size:9px;border:1px solid #1e3050;border-radius:3px;background:#0c1830;color:#8fb7e8;cursor:pointer}
+.card .dirbtn:hover{border-color:#f0729a;color:#f0729a}
+.card .dirs{display:block;margin:3px 0 2px;padding:4px 6px;background:rgba(8,12,20,.55);border-left:2px solid #2dd4bf;border-radius:2px;max-height:220px;overflow-y:auto}
+.card .dstep{display:flex;gap:5px;align-items:baseline;font-size:9px;color:#b8c8d8;padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.04);line-height:1.35}
+.card .dstep .di{flex-shrink:0;font-size:10px}
+#mc{flex:1;position:relative}
+#map{width:100%;height:100%}
+#info{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(12,18,32,.94);padding:6px 14px;border-radius:6px;font-size:11px;z-index:5;border:1px solid #1a2740;pointer-events:none;display:none;white-space:nowrap}
+#prof{position:absolute;bottom:0;left:0;right:0;height:110px;background:rgba(12,18,32,.94);border-top:1px solid #1a2740;z-index:5;display:none}
+#prof canvas{width:100%;height:100%}
+#prof .cx{position:absolute;top:3px;right:8px;color:#f0729a;cursor:pointer;font-size:13px;background:none;border:none}
+#leg{position:absolute;bottom:12px;right:10px;background:rgba(12,18,32,.92);padding:6px 10px;border-radius:6px;font-size:9px;z-index:5;border:1px solid #1a2740}
+.lr{display:flex;align-items:center;gap:4px;margin:1px 0}
+.ls{width:9px;height:9px;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,.12)}
+</style>
+</head>
+<body>
+
+<div id="side">
+  <div id="sh"><h2>🏔️ geodis · HK Pedestrian Network</h2><div class="sub">3D Terrain · Buildings · Walking Routes</div></div>
+  <div id="ctls">
+    <select id="sel"><option value="">👥 All officers</option></select>
+    <button onclick="loadFile()">📂</button>
+    <label title="Walking routes"><input type="checkbox" id="ckR" checked>🛤️</label>
+    <label title="Direction arrows"><input type="checkbox" id="ckA" checked>▶</label>
+    <label title="Full LandsD pedestrian network"><input type="checkbox" id="ckN" checked onchange="toggleNetwork()">🚶</label>
+    <label title="Street names"><input type="checkbox" id="ckL" checked onchange="toggleLabels()">🏷️</label>
+    <label title="3D Buildings"><input type="checkbox" id="ckB" checked onchange="toggleB()">🏢</label>
+    <label title="3D Terrain"><input type="checkbox" id="ckT" checked onchange="toggleT()">⛰️</label>
+    <label title="Sites"><input type="checkbox" id="ckS">📍</label>
+    <label>🏢×<input type="range" id="bh" min="1" max="5" value="2" oninput="updBh()"><span id="bhv">2</span></label>
+  </div>
+  <div id="list"><div style="padding:30px;text-align:center;opacity:.35;font-size:11px">📂 Load routes.geojson</div></div>
+</div>
+
+<div id="mc">
+  <div id="map"></div>
+  <div id="info"></div>
+  <div id="prof"><button class="cx" onclick="document.getElementById('prof').style.display='none'">✕</button><canvas id="pc"></canvas></div>
+  <div id="leg">
+    <div style="opacity:.5;margin-bottom:3px">Route cost</div>
+    <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;width:100px;margin-bottom:4px">
+      <div style="flex:1;background:#4ade80"></div><div style="flex:1;background:#facc15"></div><div style="flex:1;background:#f87171"></div><div style="flex:1;background:#c084fc"></div>
+    </div>
+    <div style="opacity:.5;margin-bottom:3px">Edge type</div>
+  </div>
+</div>
+
+<script>
+// ── Colors ───────────────────────────────────────────────────────────────
+const EC={footway:'#4ade80',stairs:'#f87171',lift:'#60a5fa',escalator:'#fb923c',footbridge:'#a78bfa',subway:'#94a3b8',crossing:'#fbbf24',indoor:'#2dd4bf'};
+const EO=['footway','stairs','lift','escalator','footbridge','subway','crossing','indoor'];
+// Fill legend
+const leg=document.getElementById('leg');
+for(const t of EO)leg.innerHTML+=`<div class="lr"><div class="ls" style="background:${EC[t]}"></div>${t}</div>`;
+
+// ── Map (NO basemap — clean 3D scene) ────────────────────────────────────
+const map=new maplibregl.Map({
+  container:'map',
+  style:{version:8,glyphs:'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    sources:{
+      terrain:{type:'raster-dem',tiles:['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],tileSize:256,encoding:'terrarium',minzoom:0,maxzoom:15}
+    },
+    layers:[
+      {id:'bg',type:'background',paint:{'background-color':'#080c14'}},
+      {id:'hillshade',type:'hillshade',source:'terrain',paint:{'hillshade-exaggeration':.4,'hillshade-shadow-color':'#080c14','hillshade-highlight-color':'#1a3050','hillshade-accent-color':'#0a1628'}}
+    ],
+    terrain:{source:'terrain',exaggeration:1.5}
+  },
+  center:[114.16,22.37],zoom:9.5,pitch:55,bearing:20,antialias:true
+});
+map.addControl(new maplibregl.NavigationControl(),'top-left');
+map.addControl(new maplibregl.ScaleControl({unit:'metric'}),'bottom-left');
+function toggleT(){const on=document.getElementById('ckT').checked;map.setTerrain(on?{source:'terrain',exaggeration:1.5}:null)}
+function toggleB(){const on=document.getElementById('ckB').checked;if(bldgL&&map.getLayer(bldgL))map.setLayoutProperty(bldgL,'visibility',on?'visible':'none');if(on)fetchBldgs()}
+function updBh(){const m=parseInt(document.getElementById('bh').value);document.getElementById('bhv').textContent=m;if(bldgL&&map.getLayer(bldgL))map.setPaintProperty(bldgL,'fill-extrusion-height',['*',['coalesce',['to-number',['get','height']],15],m])}
+
+// ── Arrow icons ──────────────────────────────────────────────────────────
+function preloadArrows(){
+  for(const[t,c]of Object.entries(EC)){
+    const k=`a-${c.replace('#','')}`;if(map.hasImage(k))continue;
+    const s=32,cx=s/2,cv=document.createElement('canvas');cv.width=s;cv.height=s;
+    const ctx=cv.getContext('2d');ctx.fillStyle=c;ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx,3);ctx.lineTo(s-3,cx+2);ctx.lineTo(cx+4,cx);ctx.lineTo(cx+4,s-3);ctx.lineTo(cx-4,s-3);ctx.lineTo(cx-4,cx);ctx.lineTo(3,cx+2);ctx.closePath();
+    ctx.fill();ctx.stroke();
+    const img=new Image();img.onload=()=>{if(!map.hasImage(k))map.addImage(k,img)};img.src=cv.toDataURL();
+  }
+  // Also a white arrow for full-route arrows
+  const wk='a-ffffff';if(!map.hasImage(wk)){
+    const s=32,cx=s/2,cv=document.createElement('canvas');cv.width=s;cv.height=s;
+    const ctx=cv.getContext('2d');ctx.fillStyle='#ffffff';ctx.strokeStyle='rgba(0,0,0,.5)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx,3);ctx.lineTo(s-3,cx+2);ctx.lineTo(cx+4,cx);ctx.lineTo(cx+4,s-3);ctx.lineTo(cx-4,s-3);ctx.lineTo(cx-4,cx);ctx.lineTo(3,cx+2);ctx.closePath();
+    ctx.fill();ctx.stroke();
+    const img=new Image();img.onload=()=>{if(!map.hasImage(wk))map.addImage(wk,img)};img.src=cv.toDataURL();
+  }
+}
+map.on('style.load',preloadArrows);
+
+// ── 3D Buildings (Overpass) ──────────────────────────────────────────────
+let bldgL=null,bldgLoaded=false;
+async function fetchBldgs(){
+  if(!document.getElementById('ckB').checked)return;
+  const b=map.getBounds(),s=b.getSouth(),w=b.getWest(),n=b.getNorth(),e=b.getEast();
+  const q=`[out:json][timeout:12];(way["building"](${s.toFixed(4)},${w.toFixed(4)},${n.toFixed(4)},${e.toFixed(4)}););out geom;`;
+  console.log('Fetching buildings from Overpass API...');
+  try{
+    const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:q,headers:{'User-Agent':'geodis-viewer/1.0'}});
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const d=await r.json(),feats=[];
+    for(const el of d.elements||[]){
+      if(el.type!=='way'||!el.geometry)continue;
+      const tags=el.tags||{};let h=parseFloat(tags.height||tags['building:height']||'0');
+      if(!h){const lv=parseFloat(tags['building:levels']||'0');if(lv)h=lv*3.5}
+      if(!h)h=15;
+      const ring=el.geometry.map(p=>[p.lon,p.lat]);if(ring.length<3)continue;
+      ring.push(ring[0]);feats.push({type:'Feature',geometry:{type:'Polygon',coordinates:[ring]},properties:{height:h}});
+    }
+    console.log(`Buildings loaded: ${feats.length}`);
+    if(feats.length===0){console.warn('No buildings in viewport');return;}
+    const fc={type:'FeatureCollection',features:feats},m=parseInt(document.getElementById('bh').value);
+    if(bldgL&&map.getLayer(bldgL)){map.removeLayer(bldgL);map.removeSource('bldgs');}
+    map.addSource('bldgs',{type:'geojson',data:fc});
+    bldgL='bldgs-e';
+    map.addLayer({id:'bldgs-e',type:'fill-extrusion',source:'bldgs',paint:{
+      'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1e3a5f',30,'#2563eb',60,'#7c3aed',100,'#db2777',200,'#f59e0b',400,'#ef4444'],
+      'fill-extrusion-height':['*',['coalesce',['to-number',['get','height']],15],m],
+      'fill-extrusion-opacity':.82,'fill-extrusion-base':0
+    }});
+    bldgLoaded=true;
+    const sub=document.querySelector('#sh .sub');
+    if(!sub.textContent.includes('buildings'))sub.textContent+=` · ${feats.length} buildings`;
+  }catch(e){
+    console.warn('Buildings (Overpass API):',e.message);
+    console.warn('Overpass may be slow/blocked from your location. Will retry on pan/zoom.');
+  }
+}
+map.on('moveend',()=>{if(document.getElementById('ckB').checked)fetchBldgs()});
+
+// ── Full LandsD pedestrian network (compact binary) ─────────────────────
+const NET_FT_COLORS=['#3ecf7d','#6edb6a','#2dd4bf','#f87171','#60a5fa','#fb923c','#a78bfa','#94a3b8','#fbbf24','#c9a35c'];
+const NET_FT_NAMES=['Footway','Footpath','Park walkway','Stairs','Lift','Escalator','Footbridge','Subway','Crossing','Ramp / other'];
+let netLoaded=false,netVisible=false,labelsLoaded=false,labelsVisible=false;
+
+function toggleNetwork(){
+  netVisible=document.getElementById('ckN').checked;
+  if(netVisible&&!netLoaded){loadPedestrianNetwork();return}
+  if(map.getLayer('pednet'))map.setLayoutProperty('pednet','visibility',netVisible?'visible':'none');
+}
+function toggleLabels(){
+  labelsVisible=document.getElementById('ckL').checked;
+  if(labelsVisible&&!labelsLoaded){loadStreetLabels();return}
+  if(map.getLayer('street-labels'))map.setLayoutProperty('street-labels','visibility',labelsVisible?'visible':'none');
+}
+
+// Parse the compact LandsD pedestrian network (network.bin) into GeoJSON
+async function loadPedestrianNetwork(){
+  const status=document.querySelector('#sh .sub');
+  const prevStatus=status.textContent;
+  status.textContent='🚶 Loading full pedestrian network (24.8 MB)...';
+  try{
+    const r=await fetch('network.bin');
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const buf=await r.arrayBuffer();
+    const dv=new DataView(buf);
+    let off=0;
+
+    // Header
+    off+=8; // magic "GEONET01"
+    off+=4; // version
+    const numFeatures=dv.getUint32(off,true);off+=4;
+    const numStreets=dv.getUint16(off,true);off+=2;
+    off+=2; // reserved
+
+    // Street table
+    const dec=new TextDecoder();
+    const streets=new Array(numStreets);
+    for(let i=0;i<numStreets;i++){
+      const len=dv.getUint16(off,true);off+=2;
+      streets[i]=dec.decode(new Uint8Array(buf,off,len));
+      off+=len;
+    }
+
+    // Features
+    const features=new Array(numFeatures);
+    for(let i=0;i<numFeatures;i++){
+      const ft=dv.getUint8(off);off+=1;
+      const sidx=dv.getUint16(off,true);off+=2;
+      const npts=dv.getUint16(off,true);off+=2;
+      const coords=new Array(npts);
+      for(let j=0;j<npts;j++){
+        const lon=dv.getFloat32(off,true);off+=4;
+        const lat=dv.getFloat32(off,true);off+=4;
+        off+=4; // skip z (2D map rendering)
+        coords[j]=[lon,lat];
+      }
+      const props={ft};
+      if(sidx!==0xFFFF)props.name=streets[sidx];
+      features[i]={type:'Feature',geometry:{type:'LineString',coordinates:coords},properties:props};
+    }
+
+    console.log(`Pedestrian network parsed: ${features.length} features, ${streets.length} streets`);
+    if(map.getLayer('pednet'))map.removeLayer('pednet');
+    if(map.getSource('pednet'))map.removeSource('pednet');
+    map.addSource('pednet',{type:'geojson',data:{type:'FeatureCollection',features}});
+
+    // One line layer, data-driven color by feature-type code
+    map.addLayer({
+      id:'pednet',type:'line',source:'pednet',
+      minzoom:12,
+      paint:{
+        'line-color':['match',['get','ft'],
+          0,'#3ecf7d',1,'#6edb6a',2,'#2dd4bf',3,'#f87171',4,'#60a5fa',
+          5,'#fb923c',6,'#a78bfa',7,'#94a3b8',8,'#fbbf24',9,'#c9a35c','#6b7280'],
+        'line-width':['interpolate',['linear'],['zoom'],12,.5,15,1.2,17,2],
+        'line-opacity':['interpolate',['linear'],['zoom'],12,.35,15,.65,17,.85]
+      }
+    });
+
+    // Keep the network lines underneath routes, buildings and labels
+    if(map.getLayer('off-c'))map.moveLayer('pednet','off-c');
+    else if(map.getLayer('bldgs-e'))map.moveLayer('pednet','bldgs-e');
+
+    // Add network legend entries
+    const leg=document.getElementById('leg');
+    let h='<div style="opacity:.5;margin:6px 0 3px">Pedestrian network</div>';
+    NET_FT_COLORS.forEach((c,i)=>{h+=`<div class="lr"><div class="ls" style="background:${c}"></div>${NET_FT_NAMES[i]}</div>`});
+    leg.innerHTML+=h;
+
+    netLoaded=true;netVisible=true;
+    status.textContent=prevStatus;
+    if(!status.textContent.includes('network'))status.textContent+=` · ${features.length.toLocaleString()} network lines`;
+  }catch(e){
+    console.error('Pedestrian network load error:',e);
+    document.getElementById('ckN').checked=false;
+    netVisible=false;
+    status.textContent=prevStatus+' · ❌ network load failed (console)';
+  }
+}
+
+// Load street-name label points
+async function loadStreetLabels(){
+  try{
+    const r=await fetch('street_labels.geojson');
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const d=await r.json();
+    if(map.getLayer('street-labels'))map.removeLayer('street-labels');
+    if(map.getSource('street-labels'))map.removeSource('street-labels');
+    map.addSource('street-labels',{type:'geojson',data:d});
+    map.addLayer({
+      id:'street-labels',type:'symbol',source:'street-labels',
+      minzoom:13.5,
+      layout:{
+        'text-field':['get','name'],
+        'text-size':['interpolate',['linear'],['zoom'],13.5,9,16,11,19,13],
+        'text-font':['Noto Sans Regular'],
+        'text-max-width':7,
+        'text-letter-spacing':.03,
+        'text-padding':2,
+        'symbol-placement':'point',
+        'text-allow-overlap':true,
+        'text-ignore-placement':true
+      },
+      paint:{
+        'text-color':'#f8fafc',
+        'text-halo-color':'rgba(8,12,20,.9)',
+        'text-halo-width':1.5
+      }
+    });
+    labelsLoaded=true;labelsVisible=true;
+    console.log(`Street labels loaded: ${d.features.length}`);
+    const sub=document.querySelector('#sh .sub');
+    if(!sub.textContent.includes('street'))sub.textContent+=` · ${d.features.length.toLocaleString()} street names`;
+  }catch(e){
+    console.error('Street labels load error:',e);
+    document.getElementById('ckL').checked=false;
+    labelsVisible=false;
+  }
+}
+
+// ── Data ─────────────────────────────────────────────────────────────────
+let allOff=[],allSites=[],fullRoutes=[],segRoutes=[],segMeta=[],officerRoutes=new Map(),activeOff=null;
+
+function loadFile(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.geojson,.json';
+  inp.onchange=e=>{const r=new FileReader();r.onload=()=>render(JSON.parse(r.result));r.readAsText(e.target.files[0])};
+  inp.click();
+}
+async function loadDefault(p){
+  const list=document.getElementById('list');
+  list.innerHTML='<div style="padding:30px;text-align:center;opacity:.5;font-size:11px">⏳ Loading routes.geojson...</div>';
+  try{
+    const r=await fetch(p);
+    if(!r.ok)throw new Error(`HTTP ${r.status} ${r.statusText}`);
+    const data=await r.json();
+    render(data);
+  }catch(e){
+    console.error('loadDefault error:',e);
+    list.innerHTML=`<div style="padding:20px;text-align:center;font-size:11px;color:#f87171">
+      ❌ Failed to load routes.geojson<br>
+      <span style="opacity:.7;font-size:10px">${e.message}</span><br><br>
+      <span style="opacity:.5">Make sure the server is running:<br>
+      <code>python3 -m http.server 8765 --bind 127.0.0.1</code><br>
+      Then open <code>http://127.0.0.1:8765/scripts/map_viewer.html</code></span>
+    </div>`;
+    document.querySelector('#sh .sub').textContent='❌ Data load failed — check console (F12)';
+  }
+}
+
+function render(data){
+  // Clear
+  segMeta.forEach(m=>{[m.lid,m.aid].forEach(id=>{if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id)})});
+  ['off-c','off-l','site-c','site-l'].forEach(id=>{if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id)});
+  // Remove old full-route layers
+  const ls=map.getStyle().layers;for(const l of ls){if(l.id.startsWith('fr-')||l.id.startsWith('fa-')){map.removeLayer(l.id);if(map.getSource(l.id))map.removeSource(l.id)}}
+  segMeta=[];allOff=[];allSites=[];fullRoutes=[];segRoutes=[];officerRoutes=new Map();activeOff=null;
+
+  for(const f of data.features||[]){
+    const p=f.properties||{},ft=p.featureType||p.type;
+    if(ft==='officer')allOff.push(f);
+    else if(ft==='site')allSites.push(f);
+    else if(ft==='route-segment')segRoutes.push(f);
+    else if(ft==='full-route')fullRoutes.push(f);
+  }
+
+  // Build officer→routes
+  for(const fr of fullRoutes){
+    const on=fr.properties.officer;
+    if(!officerRoutes.has(on))officerRoutes.set(on,[]);
+    officerRoutes.get(on).push(fr);
+  }
+  // Sort by cost
+  for(const[on,rs]of officerRoutes)rs.sort((a,b)=>a.properties.walking_cost-b.properties.walking_cost);
+
+  // Add officers
+  if(allOff.length){
+    const fc={type:'FeatureCollection',features:allOff.map(f=>({type:'Feature',geometry:f.geometry,properties:f.properties}))};
+    map.addSource('off-c',{type:'geojson',data:fc});
+    map.addLayer({id:'off-c',type:'circle',source:'off-c',paint:{'circle-radius':6,'circle-color':'#60a5fa','circle-stroke-color':'#3b82f6','circle-stroke-width':2,'circle-opacity':.9}});
+    map.addLayer({id:'off-l',type:'symbol',source:'off-c',layout:{'text-field':['get','name'],'text-size':9,'text-offset':[0,1.5],'text-anchor':'top'},paint:{'text-color':'#e0e8f0','text-halo-color':'#080c14','text-halo-width':2}});
+  }
+  // Add sites (hidden)
+  if(allSites.length){
+    const fc={type:'FeatureCollection',features:allSites.map(f=>({type:'Feature',geometry:f.geometry,properties:f.properties}))};
+    map.addSource('site-c',{type:'geojson',data:fc});
+    map.addLayer({id:'site-c',type:'circle',source:'site-c',layout:{visibility:'none'},paint:{'circle-radius':3.5,'circle-color':'#f87171','circle-opacity':.7}});
+    map.addLayer({id:'site-l',type:'symbol',source:'site-c',layout:{visibility:'none','text-field':['get','name'],'text-size':8,'text-offset':[0,1.2],'text-anchor':'top'},paint:{'text-color':'#fca5a5','text-halo-color':'#080c14','text-halo-width':2}});
+  }
+
+  // Find max cost for color scale
+  const maxCost=fullRoutes.reduce((m,r)=>Math.max(m,r.properties.walking_cost||0),1);
+
+  // Draw full continuous routes + arrows at distance intervals
+  let fid=0;
+  for(const fr of fullRoutes){
+    const p=fr.properties,coords=fr.geometry.coordinates;
+    if(coords.length<2)continue;
+    const cost=p.walking_cost||0;
+    const t=Math.min(cost/Math.max(maxCost,1),1);
+    // Color: green→yellow→red→purple
+    let color;
+    if(t<.33){const s=t/.33;color=`rgb(${Math.round(74+181*s)},${Math.round(222-192*s)},${Math.round(128-80*s)})`}
+    else if(t<.66){const s=(t-.33)/.33;color=`rgb(${Math.round(255-5*s)},${Math.round(30+224*s)},${Math.round(48-4*s)})`}
+    else{const s=(t-.66)/.34;color=`rgb(${Math.round(250-58*s)},${Math.round(254-210*s)},${Math.round(44+128*s)})`}
+
+    const lid=`fr-${fid}`;
+    map.addSource(lid,{type:'geojson',data:{type:'Feature',geometry:fr.geometry,properties:p}});
+    map.addLayer({id:lid,type:'line',source:lid,paint:{'line-color':color,'line-width':2.5,'line-opacity':.9}});
+
+    // Compute cumulative distances and place arrows
+    const dists=[0];
+    for(let i=1;i<coords.length;i++){
+      const[lo1,la1]=coords[i-1],[lo2,la2]=coords[i];
+      const dla=(la2-la1)*Math.PI/180,dlo=(lo2-lo1)*Math.PI/180;
+      const a=Math.sin(dla/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dlo/2)**2;
+      dists.push(dists[i-1]+6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
+    }
+    const totalD=dists[dists.length-1]||1;
+    const interval=Math.max(15,totalD/25); // ~25 arrows per route
+
+    let nextArrow=interval;
+    for(let i=1;i<coords.length;i++){
+      const segStart=dists[i-1],segEnd=dists[i];
+      while(nextArrow<=segEnd+.001){
+        const frac=(nextArrow-segStart)/(segEnd-segStart||.001);
+        const fracC=Math.max(0,Math.min(1,frac));
+        const lon=coords[i-1][0]+(coords[i][0]-coords[i-1][0])*fracC;
+        const lat=coords[i-1][1]+(coords[i][1]-coords[i-1][1])*fracC;
+        const z=(coords[i-1][2]||0)+((coords[i][2]||0)-(coords[i-1][2]||0))*fracC;
+        const brng=Math.atan2(coords[i][0]-coords[i-1][0],coords[i][1]-coords[i-1][1])*180/Math.PI;
+
+        const aid=`fa-${fid}-${Math.round(nextArrow)}`;
+        map.addSource(aid,{type:'geojson',data:{type:'Feature',geometry:{type:'Point',coordinates:[lon,lat,z]},properties:{}}});
+        map.addLayer({id:aid,type:'symbol',source:aid,layout:{'icon-image':'a-ffffff','icon-size':.45,'icon-rotate':brng,'icon-rotation-alignment':'map','icon-allow-overlap':true}});
+
+        segMeta.push({lid,aid,officer:p.officer,site:p.site,cost,fullDist:totalD});
+        nextArrow+=interval;
+      }
+    }
+
+    fid++;
+  }
+
+  buildSidebar();
+  if(fullRoutes.length){const bb=new maplibregl.LngLatBounds();for(const fr of fullRoutes)for(const c of fr.geometry.coordinates)bb.extend([c[0],c[1]]);map.fitBounds(bb,{padding:50,maxZoom:17})}
+  document.getElementById('sel').value='';
+  if(document.getElementById('ckB').checked)setTimeout(fetchBldgs,600);
+}
+
+// ── Sidebar ──────────────────────────────────────────────────────────────
+function buildSidebar(){
+  const sel=document.getElementById('sel');sel.innerHTML='<option value="">👥 All officers</option>';
+  const list=document.getElementById('list');list.innerHTML='';
+  for(const on of [...officerRoutes.keys()].sort()){
+    sel.innerHTML+=`<option value="${on}">${on}</option>`;
+    const rs=officerRoutes.get(on)||[],tot=rs.reduce((s,r)=>s+(r.properties.walking_cost||0),0);
+    const od=allOff.find(o=>o.properties.name===on),addr=od?od.properties.address:'',z=od?(od.geometry.coordinates[2]||0).toFixed(0):'?';
+    const card=document.createElement('div');card.className='card';card.dataset.officer=on;
+    card.onclick=()=>selectOfficer(on,card);
+    card.innerHTML=`<div class="nm">${on}</div><div class="ad">🏠 ${addr||'No address'} · ⬆${z}m</div><div class="st">📋 ${rs.length} site(s) · 🚶 ${tot.toFixed(0)}m</div>`;
+    list.appendChild(card);
+  }
+  updateStats();
+}
+function updateStats(){
+  const tot=[...officerRoutes.values()].reduce((s,rs)=>s+rs.reduce((ss,r)=>ss+(r.properties.walking_cost||0),0),0);
+  document.querySelector('#sh .sub').textContent=`${officerRoutes.size} officers · ${allSites.length} sites · ${fullRoutes.length} routes · ${(tot/1000).toFixed(1)}km total walking`;
+}
+
+function selectOfficer(oname,cardEl){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  if(cardEl)cardEl.classList.add('active');
+  activeOff=oname;
+  document.getElementById('sel').value=oname||'';
+  const showAll=!oname;
+
+  for(const m of segMeta){
+    const vis=showAll||m.officer===oname;
+    if(map.getLayer(m.lid))map.setLayoutProperty(m.lid,'visibility',vis?'visible':'none');
+    if(m.aid&&map.getLayer(m.aid))map.setLayoutProperty(m.aid,'visibility',vis?'visible':'none');
+  }
+  const sv=showAll?'none':'visible';
+  if(map.getLayer('site-c'))map.setLayoutProperty('site-c','visibility',sv);
+  if(map.getLayer('site-l'))map.setLayoutProperty('site-l','visibility',sv);
+
+  if(!showAll&&cardEl)updateCard(cardEl,oname,officerRoutes.get(oname)||[]);
+  else if(!showAll){const c=document.querySelector(`.card[data-officer="${oname}"]`);if(c)updateCard(c,oname,officerRoutes.get(oname)||[])}
+  else buildSidebar();
+
+  if(!showAll){const rs=officerRoutes.get(oname)||[];const bb=new maplibregl.LngLatBounds();for(const r of rs)for(const c of r.geometry.coordinates)bb.extend([c[0],c[1]]);if(!bb.isEmpty())map.fitBounds(bb,{padding:80,maxZoom:17})}
+  else if(fullRoutes.length){const bb=new maplibregl.LngLatBounds();for(const r of fullRoutes)for(const c of r.geometry.coordinates)bb.extend([c[0],c[1]]);map.fitBounds(bb,{padding:50,maxZoom:17})}
+}
+
+function toggleDirs(btn){
+  const dirs=btn.parentElement.querySelector('.dirs');
+  if(!dirs)return;
+  const open=dirs.style.display!=='none';
+  dirs.style.display=open?'none':'block';
+  btn.textContent=open?'🚶 Directions':'✕ Hide directions';
+}
+
+function updateCard(cardEl,oname,rs){
+  const od=allOff.find(o=>o.properties.name===oname);
+  const homeAddr=od?od.properties.address:'',homeZ=od?(od.geometry.coordinates[2]||0).toFixed(0):'?';
+  const tot=rs.reduce((s,r)=>s+(r.properties.walking_cost||0),0);
+  let h=`<div class="nm">${oname}</div><div class="home">🏠 <b>Home:</b> ${homeAddr||'No address'} · ⬆${homeZ}m</div>
+    <div class="st">📋 <b>${rs.length}</b> assigned sites · 🚶 <b>${(tot/1000).toFixed(1)}km</b> total</div>
+    <div style="font-size:9px;opacity:.35;margin:4px 0">▼ ITINERARY (nearest → furthest, strict pedestrian network)</div><div class="it">`;
+  rs.forEach((r,i)=>{
+    const p=r.properties,siteName=p.site,siteAddr=p.site_address||'';
+    const coords=r.geometry.coordinates,lastZ=coords[coords.length-1][2]||0;
+    const narr=(p.narrative||[]);
+    h+=`<div class="stop"><div class="n">${i+1}</div><div style="flex:1;min-width:0"><div class="sn">${siteName}</div><div class="sa">📍 ${siteAddr||'No address'} · ⬆${lastZ.toFixed(0)}m · ${p.waypoint_count} waypoints</div>
+      <button class="dirbtn" onclick="toggleDirs(this)">🚶 Directions (${narr.length} steps)</button>
+      <div class="dirs" style="display:none">`;
+    narr.forEach((step,j)=>{
+      // Colour-code the mode lightly
+      let icon='🚶';
+      if(step.includes('stairs'))icon='🪜';
+      else if(step.includes('lift'))icon='🛗';
+      else if(step.includes('escalator'))icon='🛗';
+      else if(step.includes('footbridge'))icon='🌉';
+      else if(step.includes('subway'))icon='🚇';
+      else if(step.includes('crossing'))icon='🚸';
+      h+=`<div class="dstep"><span class="di">${icon}</span>${step}</div>`;
+    });
+    h+=`</div></div><div class="sc">${(p.walking_cost||0).toFixed(0)}m</div></div>`;
+  });
+  h+='</div>';cardEl.innerHTML=h;
+}
+
+// ── Events ───────────────────────────────────────────────────────────────
+document.getElementById('sel').onchange=function(){const on=this.value;selectOfficer(on||null,on?document.querySelector(`.card[data-officer="${on}"]`):null)};
+document.getElementById('ckR').onchange=function(){const v=this.checked?'visible':'none';for(const m of segMeta)if(map.getLayer(m.lid))map.setLayoutProperty(m.lid,'visibility',v)};
+document.getElementById('ckA').onchange=function(){const v=this.checked?'visible':'none';for(const m of segMeta)if(m.aid&&map.getLayer(m.aid))map.setLayoutProperty(m.aid,'visibility',v)};
+document.getElementById('ckS').onchange=function(){const v=this.checked?'visible':'none';if(map.getLayer('site-c'))map.setLayoutProperty('site-c','visibility',v);if(map.getLayer('site-l'))map.setLayoutProperty('site-l','visibility',v)};
+
+map.on('click',e=>{
+  const feats=map.queryRenderedFeatures(e.point,{layers:segMeta.map(m=>m.lid).filter(id=>map.getLayer(id))});
+  if(feats.length){const p=feats[0].properties;const pop=document.getElementById('info');pop.style.display='block';pop.innerHTML=`<b>${p.officer} → ${p.site}</b> &nbsp; 🚶${(p.walking_cost||0).toFixed(0)}m &nbsp; 📏${(p.straight_line||0).toFixed(0)}m straight &nbsp; ${p.waypoint_count||'?'} waypoints`;clearTimeout(pop._t);pop._t=setTimeout(()=>pop.style.display='none',3000)}
+});
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')selectOfficer(null,null);if(e.key==='s'&&!e.ctrlKey)document.getElementById('ckS').click();if(e.key==='b')document.getElementById('ckB').click();if(e.key==='t')document.getElementById('ckT').click()});
+
+// Wait for map style to fully load before fetching data
+map.on('load',async()=>{
+  console.log('Map style loaded, fetching routes.geojson...');
+  await loadDefault('routes.geojson');
+  // Auto-load the full LandsD pedestrian network + street names if enabled
+  if(document.getElementById('ckN').checked)loadPedestrianNetwork();
+  if(document.getElementById('ckL').checked)loadStreetLabels();
+});
+</script>
+</body>
+</html>

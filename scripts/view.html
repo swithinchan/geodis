@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>geodis — Fieldwork Assignments</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#0a0f18;color:#c8d6e5;display:flex;height:100vh}
+#side{width:420px;min-width:420px;background:#0c1220;display:flex;flex-direction:column;border-right:1px solid #1a2740;overflow-y:auto}
+#sh{padding:14px 16px;background:#0a1020;border-bottom:1px solid #1a2740;position:sticky;top:0;z-index:2}
+#sh h2{color:#f0729a;font-size:18px}#sh .sub{font-size:11px;opacity:.5;margin-top:2px}
+#sh .stat{display:inline-block;background:#111d30;padding:4px 10px;border-radius:4px;margin:4px 4px 0 0;font-size:11px}
+#sh .stat b{color:#f0729a}
+#list{padding:4px 0}
+.card{margin:4px 10px;padding:10px 14px;background:#111d30;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:.12s}
+.card:hover{border-color:#f0729a}
+.card.active{border-color:#f0729a;background:#152238}
+.card .nm{font-weight:bold;color:#f0729a;font-size:13px}
+.card .ad{font-size:11px;opacity:.55;margin:2px 0}
+.card .st{font-size:10px;opacity:.4}
+.card .it{margin-top:6px;display:none}
+.card.active .it{display:block}
+.card.active .st{display:none}
+.card.active .ad{display:none}
+.stop{display:flex;align-items:flex-start;gap:8px;margin:4px 0;padding:6px 10px;background:rgba(8,12,20,.5);border-radius:5px;font-size:11px}
+.stop .n{background:#ef4444;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.stop .sn{font-weight:bold;color:#fca5a5}
+.stop .sa{font-size:10px;opacity:.45;margin-top:1px}
+.stop .sc{color:#4ade80;font-weight:bold;white-space:nowrap}
+.stop .tp{font-size:9px;opacity:.5;margin-top:2px}
+.tp-pill{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;margin:0 1px;border:1px solid}
+#map{flex:1;height:100vh}
+#zero{flex:1;display:flex;align-items:center;justify-content:center;opacity:.3;font-size:14px;text-align:center;line-height:1.8}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+<div id="side">
+  <div id="sh">
+    <h2>geodis · Fieldwork Assignments</h2>
+    <div class="sub">Loading data...</div>
+    <div id="stats"></div>
+  </div>
+  <div id="list"><div style="padding:30px;text-align:center;opacity:.4">Loading routes.geojson...</div></div>
+</div>
+<div id="zero"><div>📂 Load routes.geojson to see<br>officer assignments and map</div></div>
+<div id="map" style="display:none"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// Data
+let officers=[],sites=[],routes=[],offRoutes=new Map(),map=null,activeOff=null;
+
+async function init(){
+  try{
+    const r=await fetch('routes.geojson');
+    const d=await r.json();
+    parseData(d);
+    setupMap();
+    buildUI();
+  }catch(e){
+    document.querySelector('#list').innerHTML=`<div style="padding:30px;text-align:center;opacity:.5;font-size:12px">Could not load routes.geojson<br><br>Make sure the server is running:<br><code>python3 -m http.server 8765</code><br><br>Then reload this page.</div>`;
+    document.querySelector('#sh .sub').textContent='Data not loaded';
+  }
+}
+
+function parseData(d){
+  for(const f of d.features||[]){
+    const p=f.properties||{},ft=p.featureType||p.type;
+    if(ft==='officer')officers.push({name:p.name,addr:p.address,pos:f.geometry.coordinates});
+    else if(ft==='site')sites.push({name:p.name,addr:p.address,pos:f.geometry.coordinates});
+    else if(ft==='full-route')routes.push({officer:p.officer,site:p.site,site_addr:p.site_address||'',cost:p.walking_cost||0,straight:p.straight_line||0,ascent:p.ascent||0,descent:p.descent||0,wpts:p.waypoint_count||0,coords:f.geometry.coordinates});
+  }
+  for(const r of routes){if(!offRoutes.has(r.officer))offRoutes.set(r.officer,[]);offRoutes.get(r.officer).push(r)}
+  for(const[on,rs]of offRoutes)rs.sort((a,b)=>a.cost-b.cost);
+}
+
+function setupMap(){
+  map=L.map('map').setView([22.283,114.13],15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OSM'}).addTo(map);
+  document.getElementById('zero').style.display='none';
+  document.getElementById('map').style.display='';
+}
+
+// Color by cost
+function color(cost,maxC){
+  const t=Math.min(cost/Math.max(maxC,1),1);
+  if(t<.33){const s=t/.33;return`rgb(${Math.round(74+181*s)},${Math.round(222-192*s)},${Math.round(128-80*s)})`}
+  else if(t<.66){const s=(t-.33)/.33;return`rgb(${Math.round(255-5*s)},${Math.round(30+224*s)},${Math.round(48-4*s)})`}
+  else{const s=(t-.66)/.34;return`rgb(${Math.round(250-58*s)},${Math.round(254-210*s)},${Math.round(44+128*s)})`}
+}
+
+let routeLayers=[],officerMarkers=[],siteMarkers=[],arrowMarkers=[];
+
+function buildUI(){
+  const list=document.getElementById('list');list.innerHTML='';
+  const maxC=routes.reduce((m,r)=>Math.max(m,r.cost),1);
+
+  // Show all routes on map
+  for(const r of routes){
+    if(r.coords.length<2)continue;
+    const c=color(r.cost,maxC);
+    const poly=L.polyline(r.coords.map(p=>[p[1],p[0]]),{color:c,weight:3,opacity:.8}).addTo(map);
+    poly.bindPopup(`<b>${r.officer} → ${r.site}</b><br>${r.cost.toFixed(0)}m walking<br>${r.straight.toFixed(0)}m straight`);
+    routeLayers.push({layer:poly,officer:r.officer});
+  }
+
+  // Officer markers
+  for(const o of officers){
+    const m=L.circleMarker([o.pos[1],o.pos[0]],{radius:6,fillColor:'#3b82f6',color:'#1d4ed8',weight:2,fillOpacity:.9}).addTo(map);
+    m.bindPopup(`<b>${o.name}</b><br>${o.addr}`);
+    officerMarkers.push(m);
+  }
+
+  // Stats
+  const totCost=routes.reduce((s,r)=>s+r.cost,0);
+  document.getElementById('stats').innerHTML=`
+    <span class="stat"><b>${officers.length}</b> officers</span>
+    <span class="stat"><b>${sites.length}</b> sites</span>
+    <span class="stat"><b>${routes.length}</b> routes</span>
+    <span class="stat"><b>${(totCost/1000).toFixed(1)}</b> km total</span>`;
+  document.querySelector('#sh .sub').textContent='Click an officer to see their itinerary';
+
+  // Officer cards
+  for(const[on,rs]of [...offRoutes.entries()].sort()){
+    const tot=rs.reduce((s,r)=>s+r.cost,0);
+    const o=officers.find(x=>x.name===on);
+    const card=document.createElement('div');card.className='card';
+    card.innerHTML=`<div class="nm">${on}</div><div class="ad">🏠 ${o?o.addr:'?'} · ${o?o.pos[2].toFixed(0):'?'}m</div><div class="st">📋 ${rs.length} sites · 🚶 ${tot.toFixed(0)}m</div><div class="it"><div style="font-size:10px;opacity:.4;margin:4px 0">ITINERARY</div></div>`;
+    card.onclick=()=>selectOfficer(on,card,rs);
+    list.appendChild(card);
+  }
+}
+
+function selectOfficer(on,card,rs){
+  // Toggle active
+  const wasActive=card.classList.contains('active');
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  
+  // Show all routes
+  for(const rl of routeLayers){rl.layer.setStyle({opacity:.8,weight:3})}
+  // Clear site markers
+  siteMarkers.forEach(m=>map.removeLayer(m));siteMarkers=[];
+  arrowMarkers.forEach(m=>map.removeLayer(m));arrowMarkers=[];
+
+  if(wasActive||activeOff===on){activeOff=null;return}
+  
+  activeOff=on;card.classList.add('active');
+
+  // Highlight this officer's routes, dim others
+  for(const rl of routeLayers){
+    if(rl.officer===on)rl.layer.setStyle({opacity:1,weight:5});
+    else rl.layer.setStyle({opacity:.08,weight:1});
+  }
+
+  // Show sites for this officer
+  for(const r of rs){
+    if(r.coords.length<2)continue;
+    const last=r.coords[r.coords.length-1];
+    const m=L.circleMarker([last[1],last[0]],{radius:4,fillColor:'#ef4444',color:'#b91c1c',weight:1,fillOpacity:.9}).addTo(map);
+    const sd=sites.find(s=>s.name===r.site);
+    m.bindPopup(`<b>${r.site}</b><br>${sd?sd.addr:r.site_addr}<br>${r.cost.toFixed(0)}m`);
+    siteMarkers.push(m);
+
+    // Arrow dots along route
+    const dists=[0];
+    for(let i=1;i<r.coords.length;i++){const[lo1,la1]=r.coords[i-1],[lo2,la2]=r.coords[i];const dla=(la2-la1)*Math.PI/180,dlo=(lo2-lo1)*Math.PI/180;const a=Math.sin(dla/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dlo/2)**2;dists.push(dists[i-1]+6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)))}
+    const tot=dists[dists.length-1]||1,iv=Math.max(15,tot/25);let next=iv;
+    for(let i=1;i<r.coords.length;i++){while(next<=dists[i]+.001){const fr=(next-dists[i-1])/(dists[i]-dists[i-1]+.001),fc=Math.max(0,Math.min(1,fr));const lon=r.coords[i-1][0]+(r.coords[i][0]-r.coords[i-1][0])*fc,lat=r.coords[i-1][1]+(r.coords[i][1]-r.coords[i-1][1])*fc;const am=L.circleMarker([lat,lon],{radius:2.5,fillColor:color(r.cost,maxC),color:'transparent',fillOpacity:1}).addTo(map);arrowMarkers.push(am);next+=iv;}}
+  }
+
+  // Build itinerary HTML
+  const itDiv=card.querySelector('.it');
+  let h='<div style="font-size:10px;opacity:.4;margin:4px 0">ITINERARY (sorted by walking distance)</div>';
+  rs.forEach((r,i)=>{
+    h+=`<div class="stop"><div class="n">${i+1}</div><div style="flex:1;min-width:0"><div class="sn">${r.site}</div><div class="sa">📍 ${r.site_addr||'?'} · ⬆${r.coords[r.coords.length-1]?.[2]?.toFixed(0)||'?'}m</div><div class="tp">📏 ${r.straight.toFixed(0)}m straight · ⬆${r.ascent.toFixed(1)} ⬇${r.descent.toFixed(1)} · ${r.wpts}pts</div></div><div class="sc">${r.cost.toFixed(0)}m</div></div>`;
+  });
+  itDiv.innerHTML=h;
+
+  // Fit map
+  const bb=L.latLngBounds(rs.flatMap(r=>r.coords.map(c=>[c[1],c[0]])));
+  map.fitBounds(bb,{padding:[40,40]});
+}
+
+// Start
+init();
+</script>
+</body>
+</html>

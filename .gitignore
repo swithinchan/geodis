@@ -1,0 +1,62 @@
+# ── Sapling / VCS metadata ─────────────────────────────────────────────
+.sl/
+
+# ── Build artifacts ─────────────────────────────────────────────────────
+build/
+build_native/
+*.o
+*.a
+geodis
+geodis-viewer
+geodis-viewer.exe
+*.so
+
+# ── Checkpoints / logs ──────────────────────────────────────────────────
+.checkpoints/
+*.log
+*.tmp
+.wtest
+
+# ── Large downloaded data ───────────────────────────────────────────────
+data/pedestrian_route.json
+data/pedestrian_network.json
+data/mms_trajectory.zip
+data/mms_data/
+data/*.geojson
+data/test_1000z.geojson
+data/*.bin
+data/.cookies.txt
+
+# ── Generated outputs ───────────────────────────────────────────────────
+scripts/network.bin
+scripts/network_compact.geojson
+scripts/street_labels.geojson
+scripts/routes.geojson
+scripts/routes_old_testgraph.geojson
+scripts/routes_enriched.geojson
+scripts/buildings.bin
+scripts/viewer_data.bin
+scripts/terrain.json
+scripts/heightmap.json
+scripts/mms_roads.geojson
+scripts/buildings/
+
+# ── Third-party is tracked separately; nothing to ignore here ───────────
+
+# ── IDE / OS / Python ───────────────────────────────────────────────────
+imgui.ini
+*.swp
+*.swo
+*~
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# ── Misc / reference notes ────────────────────────────────────────────
+gemini.txt
+gemini2.txt
+gemini.txt~
+
+# Backups
+*.bak

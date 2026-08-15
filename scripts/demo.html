@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>geodis — Route Demo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0f18;color:#c8d6e5;padding:20px}
+h1{color:#f0729a;margin-bottom:4px;font-size:22px}
+.sub{opacity:.5;font-size:13px;margin-bottom:20px}
+.card{background:#111d30;border-radius:8px;padding:14px 18px;margin:8px 0;border:1px solid #1e3050}
+.card h3{color:#f0729a;font-size:14px;margin-bottom:4px}
+.card .addr{font-size:11px;opacity:.5}
+.card .cost{color:#4ade80;font-weight:bold}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+th{text-align:left;padding:6px 10px;background:#0f1a2e;color:#f0729a;font-size:11px}
+td{padding:5px 10px;border-bottom:1px solid #1a2740}
+tr:hover{background:rgba(240,114,154,.05)}
+.stats{display:flex;gap:20px;flex-wrap:wrap;margin:10px 0}
+.stat{background:#111d30;border-radius:6px;padding:10px 16px;border:1px solid #1e3050}
+.stat .val{font-size:22px;font-weight:bold;color:#f0729a}
+.stat .lbl{font-size:10px;opacity:.5}
+.route-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:2px 0}
+.error{background:#3b1018;color:#fca5a5;padding:12px;border-radius:6px;margin:10px 0;font-size:12px}
+</style>
+</head>
+<body>
+<h1>🚶 geodis — Fieldwork Assignment Demo</h1>
+<div class="sub">3D Pedestrian Network © LandsD HKSAR | 30 officers × 200 sites</div>
+
+<div class="stats" id="stats"></div>
+<div id="content">Loading...</div>
+
+<script>
+async function load() {
+  try {
+    const resp = await fetch('routes.geojson');
+    const data = await resp.json();
+    const feats = data.features || [];
+
+    const officers = feats.filter(f => f.properties?.featureType === 'officer');
+    const sites = feats.filter(f => f.properties?.featureType === 'site');
+    const fullRoutes = feats.filter(f => f.properties?.featureType === 'full-route');
+    const segments = feats.filter(f => f.properties?.featureType === 'route-segment');
+
+    // Stats
+    const reachable = fullRoutes.filter(r => (r.properties.walking_cost||0) < 1e17);
+    const unreachable = fullRoutes.filter(r => (r.properties.walking_cost||0) >= 1e17);
+    const totalCost = reachable.reduce((s,r) => s + (r.properties.walking_cost||0), 0);
+    const maxCost = Math.max(...reachable.map(r => r.properties.walking_cost||0), 1);
+
+    document.getElementById('stats').innerHTML = `
+      <div class="stat"><div class="val">${officers.length}</div><div class="lbl">Officers</div></div>
+      <div class="stat"><div class="val">${sites.length}</div><div class="lbl">Fieldwork Sites</div></div>
+      <div class="stat"><div class="val">${reachable.length}</div><div class="lbl">Reachable Routes</div></div>
+      <div class="stat"><div class="val">${(totalCost/1000).toFixed(2)}</div><div class="lbl">Total Walking (km)</div></div>
+      <div class="stat"><div class="val">${segments.length}</div><div class="lbl">Path Segments</div></div>
+    `;
+
+    // Build officer list
+    const officerRoutes = new Map();
+    for (const r of reachable) {
+      const on = r.properties.officer;
+      if (!officerRoutes.has(on)) officerRoutes.set(on, []);
+      officerRoutes.get(on).push(r);
+    }
+
+    let html = '';
+    for (const [oname, routes] of [...officerRoutes.entries()].sort()) {
+      routes.sort((a,b) => (a.properties.walking_cost||0) - (b.properties.walking_cost||0));
+      const tot = routes.reduce((s,r) => s + (r.properties.walking_cost||0), 0);
+      const officer = officers.find(o => o.properties.name === oname);
+      const addr = officer?.properties?.address || '';
+
+      html += `<div class="card">
+        <h3>👤 ${oname}</h3>
+        <div class="addr">🏠 ${addr}</div>
+        <div style="margin-top:6px;font-size:11px">📋 ${routes.length} site(s) · 🚶 <span class="cost">${tot.toFixed(0)}m</span> total</div>`;
+
+      // Route bars
+      html += '<div style="display:flex;gap:2px;margin:4px 0">';
+      for (const r of routes) {
+        const cost = r.properties.walking_cost||0;
+        const t = cost / maxCost;
+        const hue = 120 - t * 120;
+        html += `<div title="${r.properties.site}: ${cost.toFixed(0)}m" style="flex:${cost};height:4px;background:hsl(${hue},80%,50%);border-radius:2px;min-width:2px"></div>`;
+      }
+      html += '</div>';
+
+      // Itinerary table
+      html += '<table><tr><th>#</th><th>Fieldwork Site</th><th>Site Address</th><th>Walk</th><th>Waypoints</th></tr>';
+      routes.forEach((r, i) => {
+        const p = r.properties;
+        const siteData = sites.find(s => s.properties.name === p.site);
+        const saddr = siteData?.properties?.address || p.site_address || '';
+        html += `<tr>
+          <td>${i+1}</td>
+          <td><b>${p.site}</b></td>
+          <td style="opacity:.6;font-size:10px">${saddr}</td>
+          <td><span class="cost">${(p.walking_cost||0).toFixed(0)}m</span></td>
+          <td>${p.waypoint_count||'?'}</td>
+        </tr>`;
+      });
+      html += '</table></div>';
+    }
+
+    if (unreachable.length) {
+      html += `<div class="error">⚠ ${unreachable.length} officer(s) have unreachable sites (network fragment too small)</div>`;
+    }
+
+    document.getElementById('content').innerHTML = html;
+
+  } catch(e) {
+    document.getElementById('content').innerHTML =
+      `<div class="error">Error loading data: ${e.message}<br><br>
+       Make sure the server is running:<br>
+       <code>python3 -m http.server 8765 --bind 127.0.0.1</code><br>
+       Then open <code>http://localhost:8765/scripts/demo.html</code></div>`;
+  }
+}
+load();
+</script>
+</body>
+</html>

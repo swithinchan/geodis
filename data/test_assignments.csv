@@ -1,0 +1,3 @@
+officer_name,officer_address,site_name,site_address,walking_cost,walking_distance_m,straight_line_m
+Officer_B,"Flat B, Central",Site_5,"Block 5, Admiralty",0.0,0.0,1081.7
+Officer_A,"Flat A, Kennedy Town",Site_3,"Block 3, Sai Ying Pun",40.5,40.5,1183.7

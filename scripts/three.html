@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>geodis — HK 3D Viewer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#000;overflow:hidden;height:100vh;display:flex}
+#side{width:380px;min-width:380px;background:rgba(12,18,32,.95);display:flex;flex-direction:column;border-right:1px solid #1a2740;z-index:10;overflow-y:auto;color:#c8d6e5}
+#sh{padding:12px 14px;background:rgba(10,16,32,.95);border-bottom:1px solid #1a2740}
+#sh h2{color:#f0729a;font-size:16px}#sh .sub{font-size:10px;opacity:.5}
+#ctls{padding:6px 10px;border-bottom:1px solid #1a2740;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:10px}
+#ctls button{padding:4px 10px;border-radius:3px;border:none;background:#f0729a;color:#0c1220;font-weight:bold;cursor:pointer;font-size:10px}
+#ctls button:hover{background:#e85d87}
+#ctls button.off{background:#374151;color:#9ca3af}
+#ctls label{cursor:pointer;display:flex;align-items:center;gap:2px;user-select:none;font-size:10px}
+#ctls input[type=checkbox]{accent-color:#f0729a;transform:scale(.8)}
+.card{margin:3px 8px;padding:8px 10px;background:rgba(17,29,48,.8);border-radius:5px;cursor:pointer;border:1px solid transparent;font-size:11px}
+.card:hover{border-color:#f0729a}.card.active{border-color:#f0729a;background:#152238}
+.card .nm{font-weight:bold;color:#f0729a}.card .ad{font-size:10px;opacity:.5}.card .st{font-size:9px;opacity:.4}
+.card .it{margin-top:5px}
+.stop{display:flex;align-items:flex-start;gap:5px;margin:2px 0;padding:4px 6px;background:rgba(8,12,20,.5);border-radius:4px;font-size:10px}
+.stop .n{background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.stop .sn{font-weight:bold;color:#fca5a5}.stop .sa{font-size:9px;opacity:.4}.stop .sc{color:#4ade80;font-weight:bold}
+#c{flex:1;position:relative}
+#info{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(12,18,32,.9);padding:6px 14px;border-radius:6px;font-size:11px;color:#c8d6e5;pointer-events:none}
+.label{position:absolute;color:#fff;font-size:11px;font-weight:bold;text-shadow:0 0 4px #000;pointer-events:none;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(0,0,0,.6);padding:2px 6px;border-radius:3px}
+#loadStatus{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(12,18,32,.94);padding:16px 24px;border-radius:8px;font-size:13px;color:#c8d6e5;pointer-events:none;z-index:20;border:1px solid #f0729a;text-align:center}
+</style>
+</head>
+<body>
+<div id="side">
+  <div id="sh"><h2>geodis · HK 3D</h2><div class="sub">Loading...</div></div>
+  <div id="ctls">
+    <button id="btnAll" class="off" onclick="showAllOfficers()">👥 All</button>
+    <label><input type="checkbox" id="ckLabels" checked onchange="toggleLabels()">🏷 Labels</label>
+    <label><input type="checkbox" id="ckBldgs" checked onchange="toggleBuildings()">🏢 Bldgs</label>
+  </div>
+  <div id="leg" style="padding:4px 10px;border-bottom:1px solid #1a2740;font-size:9px;display:flex;flex-wrap:wrap;gap:4px 8px;opacity:.7">
+  </div>
+  <div id="list"><div style="padding:20px;text-align:center;opacity:.4;font-size:11px">Loading...</div></div>
+</div>
+<div id="c">
+  <div id="loadStatus">⏳ Loading data...</div>
+  <div id="info">🖱️ Drag=rotate · Scroll=zoom · Right-drag=pan · Esc=all</div>
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {CSS2DRenderer,CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+
+// ── Constants ──────────────────────────────────────────────────────────────
+const REF_LON=114.13,REF_LAT=22.283;
+const M_DLON=111320*Math.cos(REF_LAT*Math.PI/180),M_DLAT=110540;
+
+// Fixed w2l: GIS (lon,lat,alt) → Three.js (X=east, Y=up, Z=into-screen)
+//   out_X =  (lon - REF_LON) * M_DLON    (easting → right)
+//   out_Y =  altitude                      (up)
+//   out_Z = -(lat - REF_LAT) * M_DLAT     (northing → -Z, per gemini2.txt)
+const w2l=(lon,lat,z)=>[(lon-REF_LON)*M_DLON, z||0, -(lat-REF_LAT)*M_DLAT];
+
+// Building center in WGS84 (computed from HK80 via pyproj EPSG:2326→4326)
+// HK80 center from buildings.bin → WGS84
+const BLDG_CENTER_LON=114.13953362, BLDG_CENTER_LAT=22.29585871;
+// Precompute the Three.js offset for the building group
+const [BLDG_OFFSET_X,,BLDG_OFFSET_Z] = w2l(BLDG_CENTER_LON, BLDG_CENTER_LAT, 0);
+
+// ── Scene ──────────────────────────────────────────────────────────────────
+const W=window.innerWidth,H=window.innerHeight;
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xc8ddf0);
+scene.fog=new THREE.Fog(0xc8ddf0,1500,12000);
+
+const camera=new THREE.PerspectiveCamera(55,W/H,1,30000);
+camera.position.set(800,1200,2000);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(W,H);renderer.shadowMap.enabled=true;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+document.getElementById('c').appendChild(renderer.domElement);
+
+const labelRenderer=new CSS2DRenderer();
+labelRenderer.setSize(W,H);labelRenderer.domElement.style.position='absolute';
+labelRenderer.domElement.style.top='0';labelRenderer.domElement.style.pointerEvents='none';
+document.getElementById('c').appendChild(labelRenderer.domElement);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.dampingFactor=.12;
+controls.target.set(0,0,0);controls.maxPolarAngle=Math.PI/2.1;
+controls.update();
+
+// ── Lights ─────────────────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xffffff,.7));
+const sun=new THREE.DirectionalLight(0xffffff,2.5);
+sun.position.set(500,800,600);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.far=15000;
+sun.shadow.camera.left=-3000;sun.shadow.camera.right=3000;
+sun.shadow.camera.top=3000;sun.shadow.camera.bottom=-3000;
+scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xffffff,0x889966,.4));
+
+// ── Ground plane ───────────────────────────────────────────────────────────
+const groundGeo=new THREE.PlaneGeometry(20000,20000);
+groundGeo.rotateX(-Math.PI/2);
+const ground=new THREE.Mesh(groundGeo,
+  new THREE.MeshLambertMaterial({color:0x5a7a4a,side:THREE.DoubleSide}));
+ground.position.z=-1;ground.receiveShadow=true;
+scene.add(ground);
+
+// ── Groups ─────────────────────────────────────────────────────────────────
+const staticGroup=new THREE.Group();scene.add(staticGroup);
+const bldgGroup=new THREE.Group();scene.add(bldgGroup);
+const routeParent=new THREE.Group();scene.add(routeParent);
+const officerGroups=new Map();
+const labelGroup=new THREE.Group();scene.add(labelGroup);
+
+// ── Data state ─────────────────────────────────────────────────────────────
+let allRoutes=[],offRoutes=new Map(),officers=[],sites=[],activeOfficer=null;
+let allSegments=[]; // route-segment features with edgeType
+let segByRoute=new Map(); // "officer|site" → sorted segments
+let bldgOffsetX=0,bldgOffsetZ=0;
+
+// ── Edge type colors & labels ──────────────────────────────────────────────
+const EDGE_COLORS={
+  footway:   0x4ade80, stairs:    0xf87171, lift:      0x60a5fa,
+  escalator: 0xfb923c, footbridge:0xa78bfa, subway:    0x94a3b8,
+  crossing:  0xfbbf24, indoor:    0x2dd4bf
+};
+const EDGE_NAMES={
+  footway:'pavement', stairs:'steps', lift:'lift', escalator:'escalator',
+  footbridge:'footbridge', subway:'subway', crossing:'road crossing', indoor:'indoor walkway'
+};
+const EDGE_WHEELCHAIR={
+  footway:true, stairs:false, lift:true, escalator:false,
+  footbridge:true, subway:true, crossing:true, indoor:true
+};
+
+function edgeColor(type){return EDGE_COLORS[type]||0x888888;}
+function edgeName(type){return EDGE_NAMES[type]||type;}
+
+// ── Colors ─────────────────────────────────────────────────────────────────
+function routeColor(cost,maxC){
+  const t=Math.min(cost/Math.max(maxC,1),1);
+  if(t<.33){const s=t/.33;return new THREE.Color(0.29+0.71*s,0.87-0.75*s,0.5-0.31*s)}
+  if(t<.66){const s=(t-.33)/.33;return new THREE.Color(1-0.02*s,0.12+0.88*s,0.19-0.02*s)}
+  const s=(t-.66)/.34;return new THREE.Color(0.98-0.23*s,1-0.82*s,0.17+0.5*s);
+}
+
+function bldgColor(baseZ, roofZ, maxH){
+  const h=roofZ-baseZ;
+  const t=Math.min(h/Math.max(maxH,1),1);
+  if(t<.15) return 0xaaccbb;
+  if(t<.3) return 0xbbc0aa;
+  if(t<.5) return 0xc8c098;
+  if(t<.7) return 0xd4b888;
+  return 0xddb078;
+}
+
+// ── Load buildings binary ──────────────────────────────────────────────────
+async function loadBuildings(){
+  let numBldgs=0;
+  try{
+    const r=await fetch('buildings.bin');
+    if(!r.ok){console.warn('No buildings.bin, skipping 3D buildings');return;}
+    const buf=await r.arrayBuffer();
+    const dv=new DataView(buf);
+    let off=0;
+
+    // Header
+    const magic=String.fromCharCode(...new Uint8Array(buf,0,8));
+    if(magic!=='GEOBLDG1'){console.warn('Bad buildings magic:',magic);return;}
+    off+=8;
+    const version=dv.getUint32(off,true);off+=4;
+    const centerX=dv.getFloat64(off,true);off+=8;
+    const centerY=dv.getFloat64(off,true);off+=8;
+    numBldgs=dv.getUint32(off,true);off+=4;
+
+    console.log(`Buildings: ${numBldgs}, center=(${centerX.toFixed(0)},${centerY.toFixed(0)}) HK80`);
+
+    // Use precomputed WGS84 coordinates (from pyproj EPSG:2326→4326)
+    bldgOffsetX=BLDG_OFFSET_X; bldgOffsetZ=BLDG_OFFSET_Z;
+    console.log(`Building offset: (${bldgOffsetX.toFixed(0)}, ${bldgOffsetZ.toFixed(0)})`);
+
+    let maxH=0;
+    // First pass: find max height for coloring
+    const bldgInfos=[];
+    for(let i=0;i<numBldgs;i++){
+      const idLen=dv.getUint16(off,true);off+=2;
+      const id=String.fromCharCode(...new Uint8Array(buf,off,idLen));off+=idLen;
+      const basePD=dv.getFloat32(off,true);off+=4;
+      const roofPD=dv.getFloat32(off,true);off+=4;
+      const numV=dv.getUint32(off,true);off+=4;
+      const numI=dv.getUint32(off,true);off+=4;
+      if(roofPD-basePD>maxH)maxH=roofPD-basePD;
+      bldgInfos.push({id,basePD,roofPD,numV,numI,vertOff:off,idxOff:off+numV*12});
+      off+=numV*12+numI*4;
+    }
+
+    // Second pass: create meshes
+    const bldgMatCache={};
+    let totalTriangles=0;
+
+    for(const bi of bldgInfos){
+      const h=bi.roofPD-bi.basePD;
+      const color=bldgColor(bi.basePD,bi.roofPD,maxH);
+      const key=color.toString(16);
+      if(!bldgMatCache[key]){
+        bldgMatCache[key]=new THREE.MeshLambertMaterial({color,flatShading:true});
+      }
+
+      // Read vertices
+      const verts=new Float32Array(bi.numV*3);
+      for(let j=0;j<bi.numV;j++){
+        verts[j*3]=dv.getFloat32(bi.vertOff+j*12,true)+bldgOffsetX;
+        verts[j*3+1]=dv.getFloat32(bi.vertOff+j*12+4,true);
+        verts[j*3+2]=dv.getFloat32(bi.vertOff+j*12+8,true)+bldgOffsetZ;
+      }
+
+      // Read indices
+      const idx=[];
+      for(let j=0;j<bi.numI;j++){
+        idx.push(dv.getUint32(bi.idxOff+j*4,true));
+      }
+
+      // Skip degenerate buildings (near-zero footprint causes NaN normals)
+      let xMin=Infinity,xMax=-Infinity,yMin=Infinity,yMax=-Infinity;
+      for(let j=0;j<bi.numV;j++){
+        const vx=verts[j*3],vy=verts[j*3+1];
+        if(vx<xMin)xMin=vx;if(vx>xMax)xMax=vx;
+        if(vy<yMin)yMin=vy;if(vy>yMax)yMax=vy;
+      }
+      if((xMax-xMin)<0.5&&(yMax-yMin)<0.5)continue;
+
+      const geo=new THREE.BufferGeometry();
+      geo.setAttribute('position',new THREE.BufferAttribute(verts,3));
+      geo.setIndex(idx);
+      geo.computeVertexNormals();
+
+      const mesh=new THREE.Mesh(geo,bldgMatCache[key]);
+      mesh.castShadow=true;mesh.receiveShadow=true;
+      mesh.userData={bldgId:bi.id,basePD:bi.basePD,roofPD:bi.roofPD};
+      bldgGroup.add(mesh);
+      totalTriangles+=bi.numI/3;
+    }
+
+    console.log(`Buildings rendered: ${numBldgs}, ${totalTriangles.toFixed(0)} tris`);
+  }catch(e){
+    console.warn('Buildings load error:',e.message);
+  }
+  return numBldgs || 0;
+}
+
+// ── Load all data ──────────────────────────────────────────────────────────
+async function load(){
+  const status=document.getElementById('loadStatus');
+  try{
+    status.innerHTML='⏳ Loading buildings...';
+    const numBldgs = await loadBuildings();
+
+    // Small delay to let the HTTP connection settle
+    await new Promise(r=>setTimeout(r,200));
+
+    status.innerHTML='⏳ Loading routes...';
+    const r=await fetch('routes.geojson');
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const d=await r.json();
+
+    for(const f of d.features||[]){
+      const p=f.properties||{},ft=p.featureType||p.type;
+      if(ft==='officer')officers.push({name:p.name,addr:p.address,pos:f.geometry.coordinates});
+      else if(ft==='site')sites.push({name:p.name,addr:p.address,pos:f.geometry.coordinates});
+      else if(ft==='full-route')allRoutes.push({officer:p.officer,site:p.site,site_addr:p.site_address||'',cost:p.walking_cost||0,wpts:p.waypoint_count||0,coords:f.geometry.coordinates});
+      else if(ft==='route-segment'){
+        const seg={
+          officer:p.officer, site:p.site,
+          edgeType:p.edgeType||'footway',
+          cost:p.walking_cost||0, ascent:p.ascent||0, descent:p.descent||0,
+          idx:p.segment_index||0,
+          covered:p.is_covered||false, steep:p.is_steep||false,
+          barrier:p.has_barrier||false,
+          coords:f.geometry.coordinates
+        };
+        allSegments.push(seg);
+        const key=seg.officer+'|'+seg.site;
+        if(!segByRoute.has(key))segByRoute.set(key,[]);
+        segByRoute.get(key).push(seg);
+      }
+    }
+
+    for(const r of allRoutes){if(!offRoutes.has(r.officer))offRoutes.set(r.officer,[]);offRoutes.get(r.officer).push(r)}
+    for(const[,rs]of offRoutes)rs.sort((a,b)=>a.cost-b.cost);
+    // Sort segments within each route
+    for(const[,segs]of segByRoute)segs.sort((a,b)=>a.idx-b.idx);
+
+    status.innerHTML='⏳ Building scene...';
+
+    buildScene();
+    buildUI();
+
+    status.style.display='none';
+    document.querySelector('#sh .sub').textContent=`${officers.length} officers · ${sites.length} sites · ${allRoutes.length} routes` +
+      (numBldgs ? ` · 🏢 ${numBldgs} bldgs` : '');
+
+    // Build edge type legend
+    const leg=document.getElementById('leg');
+    for(const [type,color] of Object.entries(EDGE_COLORS)){
+      const hex='#'+color.toString(16).padStart(6,'0');
+      leg.innerHTML+=`<span style="display:inline-flex;align-items:center;gap:2px">`+
+        `<span style="width:8px;height:8px;background:${hex};border-radius:2px;display:inline-block"></span>`+
+        `${EDGE_NAMES[type]||type}</span>`;
+    }
+  }catch(e){
+    console.error(e);status.innerHTML=`❌ ${e.message}`;
+  }
+}
+
+// ── Build scene (routes + officers) ────────────────────────────────────────
+function buildScene(){
+  const maxC=allRoutes.reduce((m,r)=>Math.max(m,r.cost),1);
+
+  for(const [oname,rs]of offRoutes){
+    const grp=new THREE.Group();grp.name=oname;
+    for(const r of rs){
+      const key=oname+'|'+r.site;
+      const segs=segByRoute.get(key)||[];
+
+      let lastPt;
+      if(segs.length>0){
+        // Render each segment with its edge-type color
+        for(const seg of segs){
+          if(seg.coords.length<2)continue;
+          const pts=seg.coords.map(c=>new THREE.Vector3(...w2l(c[0],c[1],c[2])));
+          const curve=new THREE.CatmullRomCurve3(pts);
+          const color=edgeColor(seg.edgeType);
+          const tube=new THREE.Mesh(
+            new THREE.TubeGeometry(curve,Math.min(pts.length*2,60),1.5,6,false),
+            new THREE.MeshStandardMaterial({color,roughness:.6,emissive:color,emissiveIntensity:.2})
+          );
+          tube.castShadow=true;tube.receiveShadow=true;
+          grp.add(tube);
+
+          // Arrow cones
+          const dists=[0];
+          for(let i=1;i<pts.length;i++)dists.push(dists[i-1]+pts[i].distanceTo(pts[i-1]));
+          const tot=dists[dists.length-1]||1,iv=Math.max(30,tot/12);
+          let next=iv;
+          for(let i=1;i<pts.length;i++){
+            while(next<=dists[i]+.001){
+              const fc=Math.max(0,Math.min(1,(next-dists[i-1])/(dists[i]-dists[i-1]+.001)));
+              const pos=pts[i-1].clone().lerp(pts[i],fc);pos.y+=4;
+              const cone=new THREE.Mesh(
+                new THREE.ConeGeometry(1.5,3,4,4),
+                new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.4})
+              );
+              cone.position.copy(pos);
+              const dir=pts[i].clone().sub(pts[i-1]).normalize();
+              cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);
+              grp.add(cone);
+              next+=iv;
+            }
+          }
+          lastPt=pts[pts.length-1].clone();
+        }
+      }else{
+        // Fallback: render full route as single tube
+        if(r.coords.length<2)continue;
+        const pts=r.coords.map(c=>new THREE.Vector3(...w2l(c[0],c[1],c[2])));
+        const curve=new THREE.CatmullRomCurve3(pts);
+        const color=routeColor(r.cost,maxC);
+        const tube=new THREE.Mesh(
+          new THREE.TubeGeometry(curve,Math.min(pts.length*2,100),2.0,8,false),
+          new THREE.MeshStandardMaterial({color,roughness:.7})
+        );
+        tube.castShadow=true;tube.receiveShadow=true;
+        grp.add(tube);
+        lastPt=pts[pts.length-1].clone();
+      }
+
+      // Site label at route endpoint
+      if(lastPt){
+        lastPt.y+=12;
+        const div=document.createElement('div');div.className='label';
+        div.textContent=r.site;div.style.color='#ff6b8a';div.style.fontSize='10px';
+        const lbl=new CSS2DObject(div);lbl.position.copy(lastPt);
+        lbl.userData={officer:oname,type:'site'};
+        labelGroup.add(lbl);
+        grp.userData.siteLabels=grp.userData.siteLabels||[];
+        grp.userData.siteLabels.push(lbl);
+      }
+    }
+    officerGroups.set(oname,grp);
+    routeParent.add(grp);
+  }
+
+  // Officer markers
+  for(const o of officers){
+    const pos=new THREE.Vector3(...w2l(o.pos[0],o.pos[1],o.pos[2]));
+    const dot=new THREE.Mesh(
+      new THREE.SphereGeometry(4,16,16),
+      new THREE.MeshStandardMaterial({color:0x4488ff,emissive:0x2255cc,emissiveIntensity:.6,roughness:.3})
+    );
+    dot.position.copy(pos);dot.position.y+=2;
+    staticGroup.add(dot);
+    const ring=new THREE.Mesh(
+      new THREE.TorusGeometry(5,1,8,16),
+      new THREE.MeshStandardMaterial({color:0x88bbff,emissive:0x4488cc,emissiveIntensity:.4})
+    );
+    ring.position.copy(pos);ring.position.y+=2;
+    staticGroup.add(ring);
+
+    const div=document.createElement('div');div.className='label';
+    div.textContent=o.name;div.style.color='#aaddff';div.style.fontSize='11px';div.style.fontWeight='bold';
+    const lbl=new CSS2DObject(div);lbl.position.copy(pos.clone().add(new THREE.Vector3(0,12,0)));
+    labelGroup.add(lbl);
+  }
+
+  // Fit camera
+  if(allRoutes.length){
+    const allPts=[];
+    for(const r of allRoutes)for(const c of r.coords)allPts.push(new THREE.Vector3(...w2l(c[0],c[1],c[2])));
+    const box=new THREE.Box3().setFromPoints(allPts);
+    const c=box.getCenter(new THREE.Vector3());
+    const s=box.getSize(new THREE.Vector3());
+    controls.target.copy(c);
+    const dist=Math.max(s.x,s.z)*1.2+200;
+    camera.position.copy(c.clone().add(new THREE.Vector3(dist*0.5,dist*0.6,-dist*0.6)));
+    controls.update();
+  }
+}
+
+// ── UI ─────────────────────────────────────────────────────────────────────
+function buildUI(){
+  const list=document.getElementById('list');list.innerHTML='';
+  for(const[on,rs]of [...offRoutes.entries()].sort()){
+    const tot=rs.reduce((s,r)=>s+r.cost,0);
+    const o=officers.find(x=>x.name===on);
+    const card=document.createElement('div');card.className='card';card.dataset.officer=on;
+    card.innerHTML=`<div class="nm">${on}</div><div class="ad">🏠 ${o?o.addr:'?'}</div><div class="st">📋 ${rs.length} sites · 🚶 ${tot.toFixed(0)}m</div><div class="it"></div>`;
+    card.onclick=()=>selectOfficer(on,card,rs);
+    list.appendChild(card);
+  }
+}
+
+function selectOfficer(oname,card,rs){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  if(activeOfficer===oname){activeOfficer=null;document.getElementById('btnAll').classList.add('off');showAllOfficers();return;}
+  activeOfficer=oname;card.classList.add('active');document.getElementById('btnAll').classList.remove('off');
+
+  for(const[,grp]of officerGroups){
+    routeParent.remove(grp);
+    if(grp.userData.siteLabels)for(const l of grp.userData.siteLabels)l.visible=false;
+  }
+  const selGrp=officerGroups.get(oname);
+  if(selGrp){
+    routeParent.add(selGrp);
+    if(selGrp.userData.siteLabels)for(const l of selGrp.userData.siteLabels)l.visible=true;
+  }
+
+  // Fit camera
+  const allPts=[];
+  for(const r of rs)for(const c of r.coords)allPts.push(new THREE.Vector3(...w2l(c[0],c[1],c[2])));
+  if(allPts.length){
+    const box=new THREE.Box3().setFromPoints(allPts);
+    const c=box.getCenter(new THREE.Vector3());
+    controls.target.copy(c);
+    const d=Math.max(box.getSize(new THREE.Vector3()).x,box.getSize(new THREE.Vector3()).z)*1.5+100;
+    camera.position.copy(c.clone().add(new THREE.Vector3(d*0.5,d*0.6,-d*0.5)));
+    controls.update();
+  }
+
+  const itDiv=card.querySelector('.it');
+  let h='<div style="font-size:9px;opacity:.4;margin:4px 0">▼ ITINERARY</div>';
+  rs.forEach((r,i)=>{
+    const key=oname+'|'+r.site;
+    const segs=segByRoute.get(key)||[];
+    const lz=r.coords[r.coords.length-1]?.[2]||0;
+
+    // Build detailed directions from segments
+    let dirs='';
+    if(segs.length>0){
+      // Extract street names from addresses
+      const offAddr=r.site_addr||''; // actually this is the site address
+      const offParts=offAddr.split(',').map(p=>p.trim());
+      const offStreet=offParts.length>=2 ? offParts[offParts.length-1] : '';
+
+      let steps=[];
+      for(const seg of segs){
+        const en=edgeName(seg.edgeType);
+        const dist=seg.cost.toFixed(0);
+        const up=seg.ascent>0?`↑${seg.ascent.toFixed(1)}m`:'';
+        const down=seg.descent>0?`↓${seg.descent.toFixed(1)}m`:'';
+        const cov=seg.covered?' (covered)':'';
+        const steep=seg.steep?' ⚠steep':'';
+        const barrier=seg.barrier?' 🚫barrier':'';
+
+        let verb='Walk along';
+        if(seg.edgeType==='stairs')verb='Take the steps';
+        else if(seg.edgeType==='lift')verb='Take the lift';
+        else if(seg.edgeType==='escalator')verb='Take the escalator';
+        else if(seg.edgeType==='footbridge')verb='Cross via footbridge';
+        else if(seg.edgeType==='subway')verb='Go through subway';
+        else if(seg.edgeType==='crossing')verb='Cross at';
+
+        let street='the street';
+        if(seg.edgeType==='footbridge')street='the footbridge';
+        else if(seg.edgeType==='subway')street='the subway';
+        else if(seg.edgeType==='lift')street='';
+        else if(seg.edgeType==='escalator')street='';
+
+        let desc=`${verb}${street?' '+street:''} for ${dist}m`;
+        if(up||down)desc+=` (${[up,down].filter(Boolean).join(', ')})`;
+        if(cov||steep||barrier)desc+=` ${[cov,steep,barrier].filter(Boolean).join(' ')}`;
+
+        // Wheelchair note
+        let wc='';
+        if(!EDGE_WHEELCHAIR[seg.edgeType]||seg.barrier||seg.steep){
+          wc=' ♿ Not wheelchair-accessible';
+          if(seg.edgeType==='stairs')wc+=' — look for a lift alternative';
+          if(seg.barrier)wc+=' — barrier detected';
+        }
+
+        steps.push({desc, wc, dist:seg.cost, color:edgeColor(seg.edgeType)});
+      }
+
+      // Summary line
+      const totalDist=segs.reduce((s,seg)=>s+seg.cost,0);
+      const totalUp=segs.reduce((s,seg)=>s+seg.ascent,0);
+      const totalDown=segs.reduce((s,seg)=>s+seg.descent,0);
+      const hasWcIssue=segs.some(s=>!EDGE_WHEELCHAIR[s.edgeType]||s.barrier||s.steep);
+      const bridgeSegs=segs.filter(s=>s.edgeType==='footbridge');
+      const stairsSegs=segs.filter(s=>s.edgeType==='stairs');
+      const liftSegs=segs.filter(s=>s.edgeType==='lift');
+
+      // Narrative summary
+      let summary=`<b>${r.site}</b> — `;
+      summary+=`${totalDist.toFixed(0)}m walk`;
+      if(totalUp>0)summary+=`, climbing ${totalUp.toFixed(0)}m`;
+      if(totalDown>0)summary+=`, descending ${totalDown.toFixed(0)}m`;
+      if(bridgeSegs.length>0)summary+=`, using ${bridgeSegs.length} footbridge(s)`;
+      if(stairsSegs.length>0)summary+=`, with ${stairsSegs.length} flight(s) of stairs`;
+      if(liftSegs.length>0)summary+=`, via ${liftSegs.length} lift(s)`;
+
+      dirs+=`<div style="font-size:10px;color:#fca5a5;margin:2px 0;line-height:1.4">${summary}</div>`;
+
+      // Show each step
+      steps.forEach((st,si)=>{
+        const ec='#'+st.color.toString(16).padStart(6,'0');
+        dirs+=`<div class="stop" style="border-left:3px solid ${ec}">`;
+        dirs+=`<div class="n">${si+1}</div>`;
+        dirs+=`<div style="flex:1;min-width:0">`;
+        dirs+=`<div class="sn" style="color:${ec}">${st.desc}</div>`;
+        if(st.wc)dirs+=`<div style="font-size:9px;color:#fbbf24;margin-top:1px">${st.wc}</div>`;
+        dirs+=`</div>`;
+        dirs+=`<div class="sc">${st.dist.toFixed(0)}m</div>`;
+        dirs+=`</div>`;
+      });
+
+      if(hasWcIssue){
+        dirs+=`<div style="font-size:9px;color:#fbbf24;margin:4px 0;padding:4px 6px;background:rgba(251,191,36,.1);border-radius:4px">`;
+        dirs+=`♿ <b>Accessibility note:</b> This route has steps or barriers. `;
+        dirs+=`Check the pedestrian network for lift-equipped alternatives.`;
+        dirs+=`</div>`;
+      }
+    }else{
+      dirs+=`<div style="font-size:10px;opacity:.5">No segment details available.</div>`;
+    }
+
+    h+=`<div style="margin:6px 0;padding:6px;background:rgba(8,12,20,.35);border-radius:5px">${dirs}</div>`;
+  });
+  itDiv.innerHTML=h;
+}
+
+window.showAllOfficers=function(){
+  activeOfficer=null;
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('btnAll').classList.add('off');
+  for(const[,grp]of officerGroups){if(!grp.parent)routeParent.add(grp);if(grp.userData.siteLabels)for(const l of grp.userData.siteLabels)l.visible=true;}
+  if(allRoutes.length){
+    const allPts=[];
+    for(const r of allRoutes)for(const c of r.coords)allPts.push(new THREE.Vector3(...w2l(c[0],c[1],c[2])));
+    const box=new THREE.Box3().setFromPoints(allPts);
+    const c=box.getCenter(new THREE.Vector3());
+    controls.target.copy(c);
+    const d=Math.max(box.getSize(new THREE.Vector3()).x,box.getSize(new THREE.Vector3()).z)*1.2+150;
+    camera.position.copy(c.clone().add(new THREE.Vector3(d*0.5,d*0.6,-d*0.5)));
+    controls.update();
+  }
+};
+
+window.toggleLabels=function(){labelGroup.visible=document.getElementById('ckLabels').checked;};
+window.toggleBuildings=function(){bldgGroup.visible=document.getElementById('ckBldgs').checked;};
+
+// ── Animation ──────────────────────────────────────────────────────────────
+function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera);labelRenderer.render(scene,camera);}
+animate();
+
+window.addEventListener('resize',()=>{
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  labelRenderer.setSize(window.innerWidth,window.innerHeight);
+  camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')showAllOfficers();
+  if(e.key==='l')document.getElementById('ckLabels').click();
+  if(e.key==='b')document.getElementById('ckBldgs').click();
+});
+
+load();
+</script>
+</body>
+</html>

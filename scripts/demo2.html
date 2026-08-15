@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>geodis — HK Pedestrian Network</title>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#0a0f18;color:#c8d6e5;overflow:hidden;height:100vh;display:flex}
+#side{width:380px;min-width:380px;background:#0c1220;display:flex;flex-direction:column;border-right:1px solid #1a2740;z-index:10}
+#sh{padding:12px 14px;background:#0a1020;border-bottom:1px solid #1a2740}
+#sh h2{color:#f0729a;font-size:16px}#sh .sub{font-size:10px;opacity:.5}
+#ctls{padding:6px 10px;border-bottom:1px solid #1a2740;display:flex;gap:4px;flex-wrap:wrap;align-items:center;font-size:11px}
+#ctls select{flex:1;min-width:0;padding:4px;border-radius:3px;border:1px solid #1e3050;background:#111d30;color:#c8d6e5;font-size:11px}
+#ctls button{padding:4px 8px;border-radius:3px;border:none;background:#f0729a;color:#0c1220;font-weight:bold;cursor:pointer;font-size:10px}
+#ctls label{font-size:10px;cursor:pointer;display:flex;align-items:center;gap:2px}
+#ctls input[type=checkbox]{accent-color:#f0729a}
+#list{flex:1;overflow-y:auto;padding:4px 0}
+.card{margin:3px 7px;padding:8px 10px;background:#111d30;border-radius:5px;cursor:pointer;border:1px solid transparent;font-size:11px}
+.card:hover{border-color:#f0729a}
+.card.active{border-color:#f0729a;background:#152238}
+.card .nm{font-weight:bold;color:#f0729a}
+.card .ad{font-size:10px;opacity:.5;margin:2px 0}
+.card .st{font-size:9px;opacity:.4}
+.card .it{margin-top:5px}
+.stop{display:flex;align-items:flex-start;gap:5px;margin:2px 0;padding:4px 6px;background:rgba(8,12,20,.4);border-radius:4px;font-size:10px}
+.stop .n{background:#ef4444;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.stop .sn{font-weight:bold;color:#fca5a5}
+.stop .sa{font-size:9px;opacity:.4}
+.stop .sc{color:#4ade80;font-weight:bold;white-space:nowrap;font-size:10px}
+#mc{flex:1;position:relative}
+#map{width:100%;height:100%}
+#leg{position:absolute;bottom:12px;right:10px;background:rgba(12,18,32,.92);padding:6px 10px;border-radius:6px;font-size:9px;z-index:5;border:1px solid #1a2740}
+.lr{display:flex;align-items:center;gap:4px;margin:1px 0}
+.ls{width:8px;height:8px;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,.12)}
+#info{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(12,18,32,.94);padding:5px 12px;border-radius:6px;font-size:10px;z-index:5;border:1px solid #1a2740;pointer-events:none;display:none}
+</style>
+</head>
+<body>
+<div id="side">
+  <div id="sh"><h2>geodis · HK Pedestrian Network</h2><div class="sub">Loading...</div></div>
+  <div id="ctls">
+    <select id="sel"><option value="">All officers</option></select>
+    <button onclick="loadFile()">Load</button>
+    <label><input type="checkbox" id="ckR" checked>Routes</label>
+    <label><input type="checkbox" id="ckA" checked>Arrows</label>
+    <label><input type="checkbox" id="ckB" onchange="toggleB()">Bldgs</label>
+    <label><input type="checkbox" id="ckS">Sites</label>
+  </div>
+  <div id="list"><div style="padding:20px;text-align:center;opacity:.4;font-size:11px">Loading routes.geojson...</div></div>
+</div>
+<div id="mc">
+  <div id="map"></div>
+  <div id="leg"><div style="opacity:.5;margin-bottom:2px">Path types</div></div>
+  <div id="info"></div>
+</div>
+
+<script>
+const TC={footway:'#4ade80',stairs:'#f87171',lift:'#60a5fa',escalator:'#fb923c',footbridge:'#a78bfa',subway:'#94a3b8',crossing:'#fbbf24',indoor:'#2dd4bf'};
+const TO=['footway','stairs','lift','escalator','footbridge','subway','crossing','indoor'];
+const leg=document.getElementById('leg');
+for(const t of TO)leg.innerHTML+=`<div class="lr"><div class="ls" style="background:${TC[t]}"></div>${t}</div>`;
+
+const map=new maplibregl.Map({container:'map',
+  style:{version:8,glyphs:'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    sources:{osm:{type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,attribution:'&copy; OSM'}},
+    layers:[{id:'osm',type:'raster',source:'osm'}]
+  },
+  center:[114.13,22.283],zoom:15,antialias:true
+});
+map.addControl(new maplibregl.NavigationControl(),'top-left');
+
+let allOff=[],allSites=[],fullRoutes=[],officerRoutes=new Map(),bldgLoaded=false;
+
+async function loadFile(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.geojson,.json';
+  inp.onchange=e=>{const r=new FileReader();r.onload=()=>render(JSON.parse(r.result));r.readAsText(e.target.files[0])};inp.click();
+}
+
+async function render(data){
+  // Clear old
+  for(const id of['off-c','off-l','site-c','site-l']){if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id);}
+  const ls=map.getStyle().layers;for(const l of ls)if(l.id.startsWith('fr-')||l.id.startsWith('fa-')){map.removeLayer(l.id);if(map.getSource(l.id))map.removeSource(l.id);}
+  allOff=[];allSites=[];fullRoutes=[];officerRoutes=new Map();
+
+  for(const f of data.features||[]){
+    const p=f.properties||{},ft=p.featureType||p.type;
+    if(ft==='officer')allOff.push(f);
+    else if(ft==='site')allSites.push(f);
+    else if(ft==='full-route')fullRoutes.push(f);
+  }
+
+  for(const fr of fullRoutes){
+    const on=fr.properties.officer;
+    if(!officerRoutes.has(on))officerRoutes.set(on,[]);
+    officerRoutes.get(on).push(fr);
+  }
+  for(const[on,rs]of officerRoutes)rs.sort((a,b)=>a.properties.walking_cost-b.properties.walking_cost);
+
+  // Officer points
+  if(allOff.length){
+    map.addSource('off-c',{type:'geojson',data:{type:'FeatureCollection',features:allOff.map(f=>({type:'Feature',geometry:f.geometry,properties:f.properties}))}});
+    map.addLayer({id:'off-c',type:'circle',source:'off-c',paint:{'circle-radius':6,'circle-color':'#3b82f6','circle-stroke-color':'#1d4ed8','circle-stroke-width':2,'circle-opacity':.9}});
+    map.addLayer({id:'off-l',type:'symbol',source:'off-c',layout:{'text-field':['get','name'],'text-size':9,'text-offset':[0,1.5],'text-anchor':'top'},paint:{'text-color':'#e0e8f0','text-halo-color':'#0a0f18','text-halo-width':2}});
+  }
+  if(allSites.length){
+    map.addSource('site-c',{type:'geojson',data:{type:'FeatureCollection',features:allSites.map(f=>({type:'Feature',geometry:f.geometry,properties:f.properties}))}});
+    map.addLayer({id:'site-c',type:'circle',source:'site-c',layout:{visibility:'none'},paint:{'circle-radius':3.5,'circle-color':'#f87171','circle-opacity':.7}});
+    map.addLayer({id:'site-l',type:'symbol',source:'site-c',layout:{visibility:'none','text-field':['get','name'],'text-size':8,'text-offset':[0,1.2],'text-anchor':'top'},paint:{'text-color':'#fca5a5','text-halo-color':'#0a0f18','text-halo-width':2}});
+  }
+
+  // Routes
+  const maxC=fullRoutes.reduce((m,r)=>Math.max(m,r.properties.walking_cost||0),1);
+  let fid=0;
+  for(const fr of fullRoutes){
+    const p=fr.properties,coords=fr.geometry.coordinates;
+    if(coords.length<2)continue;
+    const t=Math.min((p.walking_cost||0)/maxC,1);
+    let c;if(t<.33){const s=t/.33;c=`rgb(${Math.round(74+181*s)},${Math.round(222-192*s)},${Math.round(128-80*s)})`}
+    else if(t<.66){const s=(t-.33)/.33;c=`rgb(${Math.round(255-5*s)},${Math.round(30+224*s)},${Math.round(48-4*s)})`}
+    else{const s=(t-.66)/.34;c=`rgb(${Math.round(250-58*s)},${Math.round(254-210*s)},${Math.round(44+128*s)})`}
+    const lid=`fr-${fid}`;
+    map.addSource(lid,{type:'geojson',data:{type:'Feature',geometry:fr.geometry,properties:p}});
+    map.addLayer({id:lid,type:'line',source:lid,paint:{'line-color':c,'line-width':2.5,'line-opacity':.9}});
+    // Arrows
+    const dists=[0];
+    for(let i=1;i<coords.length;i++){const[lo1,la1]=coords[i-1],[lo2,la2]=coords[i];const dla=(la2-la1)*Math.PI/180,dlo=(lo2-lo1)*Math.PI/180;const a=Math.sin(dla/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dlo/2)**2;dists.push(dists[i-1]+6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)))}
+    const tot=dists[dists.length-1]||1,iv=Math.max(15,tot/25);let next=iv;
+    for(let i=1;i<coords.length;i++){while(next<=dists[i]+.001){const fr=(next-dists[i-1])/(dists[i]-dists[i-1]+.001),fc=Math.max(0,Math.min(1,fr));const lon=coords[i-1][0]+(coords[i][0]-coords[i-1][0])*fc,lat=coords[i-1][1]+(coords[i][1]-coords[i-1][1])*fc,z=(coords[i-1][2]||0)+((coords[i][2]||0)-(coords[i-1][2]||0))*fc,brng=Math.atan2(coords[i][0]-coords[i-1][0],coords[i][1]-coords[i-1][1])*180/Math.PI;
+      const aid=`fa-${fid}-${Math.round(next)}`;map.addSource(aid,{type:'geojson',data:{type:'Feature',geometry:{type:'Point',coordinates:[lon,lat,z]},properties:{}}});map.addLayer({id:aid,type:'circle',source:aid,paint:{'circle-radius':3,'circle-color':c,'circle-opacity':.9}});
+      next+=iv;}}
+    fid++;
+  }
+
+  buildSidebar();
+  if(fullRoutes.length){const bb=new maplibregl.LngLatBounds();for(const fr of fullRoutes)for(const c of fr.geometry.coordinates)bb.extend([c[0],c[1]]);map.fitBounds(bb,{padding:50,maxZoom:17})}
+  document.getElementById('sel').value='';
+  document.querySelector('#sh .sub').textContent=`${officerRoutes.size} officers · ${allSites.length} sites · ${fullRoutes.length} routes`;
+}
+
+function buildSidebar(){
+  const sel=document.getElementById('sel');sel.innerHTML='<option value="">All officers</option>';
+  const list=document.getElementById('list');list.innerHTML='';
+  for(const on of [...officerRoutes.keys()].sort()){
+    sel.innerHTML+=`<option value="${on}">${on}</option>`;
+    const rs=officerRoutes.get(on)||[],tot=rs.reduce((s,r)=>s+(r.properties.walking_cost||0),0);
+    const od=allOff.find(o=>o.properties.name===on),addr=od?od.properties.address:'',z=od?(od.geometry.coordinates[2]||0).toFixed(0):'?';
+    const card=document.createElement('div');card.className='card';card.dataset.officer=on;
+    card.onclick=()=>selectOfficer(on,card);
+    card.innerHTML=`<div class="nm">${on}</div><div class="ad">${addr||'No address'} · ${z}m</div><div class="st">${rs.length} sites · ${tot.toFixed(0)}m</div>`;
+    list.appendChild(card);
+  }
+}
+
+let activeOff=null;
+function selectOfficer(on,cardEl){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  if(cardEl)cardEl.classList.add('active');
+  activeOff=on;document.getElementById('sel').value=on||'';
+  
+  // Filter routes
+  let fid=0;
+  for(const fr of fullRoutes){
+    const vis=!on||fr.properties.officer===on;
+    const lid=`fr-${fid}`;if(map.getLayer(lid))map.setLayoutProperty(lid,'visibility',vis?'visible':'none');
+    fid++;
+  }
+  const sv=on?'visible':'none';
+  if(map.getLayer('site-c'))map.setLayoutProperty('site-c','visibility',sv);
+  if(map.getLayer('site-l'))map.setLayoutProperty('site-l','visibility',sv);
+
+  if(on&&cardEl)updateCard(cardEl,on,officerRoutes.get(on)||[]);
+  else if(on){const c=document.querySelector(`.card[data-officer="${on}"]`);if(c)updateCard(c,on,officerRoutes.get(on)||[])}
+  else buildSidebar();
+
+  if(on){const rs=officerRoutes.get(on)||[];const bb=new maplibregl.LngLatBounds();for(const r of rs)for(const c of r.geometry.coordinates)bb.extend([c[0],c[1]]);if(!bb.isEmpty())map.fitBounds(bb,{padding:80,maxZoom:17})}
+  else if(fullRoutes.length){const bb=new maplibregl.LngLatBounds();for(const r of fullRoutes)for(const c of r.geometry.coordinates)bb.extend([c[0],c[1]]);map.fitBounds(bb,{padding:50,maxZoom:17})}
+}
+
+function updateCard(cardEl,on,rs){
+  const od=allOff.find(o=>o.properties.name===on);
+  const homeAddr=od?od.properties.address:'',homeZ=od?(od.geometry.coordinates[2]||0).toFixed(0):'?';
+  const tot=rs.reduce((s,r)=>s+(r.properties.walking_cost||0),0);
+  let h=`<div class="nm">${on}</div><div style="font-size:10px;padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.08);margin-bottom:3px">Home: ${homeAddr||'?'} · ${homeZ}m</div><div class="st">${rs.length} sites · ${tot.toFixed(0)}m</div><div style="font-size:9px;opacity:.3;margin:4px 0">ITINERARY</div><div class="it">`;
+  rs.forEach((r,i)=>{
+    const p=r.properties,coords=r.geometry.coordinates,lastZ=coords[coords.length-1]?.[2]||0;
+    h+=`<div class="stop"><div class="n">${i+1}</div><div style="flex:1;min-width:0"><div class="sn">${p.site}</div><div class="sa">${p.site_address||''} · ${lastZ.toFixed(0)}m · ${p.waypoint_count}pts</div></div><div class="sc">${(p.walking_cost||0).toFixed(0)}m</div></div>`;
+  });
+  h+='</div>';cardEl.innerHTML=h;
+}
+
+// Load buildings from OSM
+async function fetchBldgs(){
+  if(bldgLoaded||!document.getElementById('ckB').checked)return;
+  const b=map.getBounds(),s=b.getSouth(),w=b.getWest(),n=b.getNorth(),e=b.getEast();
+  try{
+    const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:`[out:json][timeout:15];(way["building"](${s.toFixed(4)},${w.toFixed(4)},${n.toFixed(4)},${e.toFixed(4)}););out geom;`,headers:{'User-Agent':'geodis/1.0'}});
+    const d=await r.json(),feats=[];
+    for(const el of d.elements||[]){if(el.type!=='way'||!el.geometry)continue;const tags=el.tags||{};let h=parseFloat(tags.height||tags['building:height']||'0');if(!h){const lv=parseFloat(tags['building:levels']||'0');if(lv)h=lv*3.5}if(!h)h=15;const ring=el.geometry.map(p=>[p.lon,p.lat]);if(ring.length<3)continue;ring.push(ring[0]);feats.push({type:'Feature',geometry:{type:'Polygon',coordinates:[ring]},properties:{height:h}})}
+    if(map.getLayer('bldgs')){map.removeLayer('bldgs');map.removeSource('bldgs');}
+    map.addSource('bldgs',{type:'geojson',data:{type:'FeatureCollection',features:feats}});
+    map.addLayer({id:'bldgs',type:'fill-extrusion',source:'bldgs',paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1e3a5f',30,'#2563eb',60,'#7c3aed',100,'#db2777',200,'#f59e0b',400,'#ef4444'],'fill-extrusion-height':['*',['coalesce',['to-number',['get','height']],15],2],'fill-extrusion-opacity':.8,'fill-extrusion-base':0}});
+    bldgLoaded=true;
+    document.querySelector('#sh .sub').textContent+=` · ${feats.length} buildings`;
+  }catch(e){console.log('Buildings:',e)}
+}
+function toggleB(){if(document.getElementById('ckB').checked){fetchBldgs()}else{if(map.getLayer('bldgs'))map.setLayoutProperty('bldgs','visibility','none')}}
+
+document.getElementById('sel').onchange=function(){const on=this.value;selectOfficer(on||null,on?document.querySelector(`.card[data-officer="${on}"]`):null)};
+document.getElementById('ckR').onchange=function(){const v=this.checked?'visible':'none';let fid=0;for(const fr of fullRoutes){const lid=`fr-${fid}`;if(map.getLayer(lid))map.setLayoutProperty(lid,'visibility',v);fid++}};
+document.getElementById('ckA').onchange=function(){const v=this.checked?'visible':'none';for(const l of map.getStyle().layers)if(l.id.startsWith('fa-'))map.setLayoutProperty(l.id,'visibility',v)};
+document.getElementById('ckS').onchange=function(){const v=this.checked?'visible':'none';if(map.getLayer('site-c'))map.setLayoutProperty('site-c','visibility',v);if(map.getLayer('site-l'))map.setLayoutProperty('site-l','visibility',v)};
+
+map.on('click',e=>{
+  const feats=map.queryRenderedFeatures(e.point,{layers:map.getStyle().layers.filter(l=>l.id.startsWith('fr-')).map(l=>l.id)});
+  if(feats.length){const p=feats[0].properties;const pop=document.getElementById('info');pop.style.display='block';pop.innerHTML=`<b>${p.officer} → ${p.site}</b> · ${(p.walking_cost||0).toFixed(0)}m`;clearTimeout(pop._t);pop._t=setTimeout(()=>pop.style.display='none',2500)}
+});
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')selectOfficer(null,null);if(e.key==='s')document.getElementById('ckS').click();if(e.key==='b')document.getElementById('ckB').click()});
+
+// Auto-load routes.geojson
+(async()=>{try{const r=await fetch('routes.geojson');render(await r.json())}catch(e){document.querySelector('#list').innerHTML='<div style="padding:20px;text-align:center;opacity:.4;font-size:11px">Could not load routes.geojson<br>Use Load button or check server</div>'}})();
+</script>
+</body>
+</html>
