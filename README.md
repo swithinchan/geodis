@@ -2,25 +2,39 @@
 
 **A C++20 engine that allocates fieldwork officers to survey addresses across
 Hong Kong's 18 districts, and produces turn-by-turn walking itineraries that
-strictly follow the Lands Department 3D Pedestrian Network — footways,
-footbridges, subways, stairs, lifts, escalators and crossings.**
+strictly follow the Lands Department 3D Pedestrian Network.**
 
 Built on the [HK Lands Department 3D Pedestrian Network](https://portal.csdi.gov.hk/geoportal/)
-(465,475 route segments, ~19,000 km, covering every built-up area), with real
-street names from the government Road Centreline dataset.
+(465,475 route segments, ~19,000 km) with real street names from the government
+Road Centreline dataset.
+
+![3D overview](docs/districts/3d_hk_overview.png)
 
 ---
 
-## 1. What it does
+## 1. Cluster allocation algorithm
 
-- **Snaps** officers and survey addresses to the nearest pedestrian-network node
-  (R-tree spatial index).
-- **Allocates** each address to an officer with a **load-balanced clustering
-  algorithm** (each assignment adds a relative penalty to the officer, so no
-  single officer is overloaded).
-- **Routes** every itinerary along the pedestrian network using Dijkstra with a
-  tuned walking-cost model.
-- **Explains** each itinerary as a merged turn-by-turn narrative by travel mode:
+Officers are allocated addresses with a **greedy balanced clustering**
+algorithm (`--mode cluster`):
+
+1. **Snap** every officer and survey address to its nearest pedestrian-network
+   node using an R-tree spatial index.
+2. **Build a full distance matrix** — one parallelised Dijkstra per officer
+   (TBB) gives the network walking cost from that officer to every address.
+3. **Assign each address** to the officer that minimises the penalised score:
+
+```
+score[o] = walking_cost[o][s] × (1 + load_penalty × assigned_count[o])
+```
+
+   where `assigned_count[o]` is how many addresses officer `o` already has, and
+   `load_penalty` defaults to **0.15** (each existing assignment adds a 15%
+   distance penalty). This keeps workloads balanced instead of dumping every
+   address on the nearest officer.
+
+4. **Route geometry + narrative** are produced for every assignment by
+   reconstructing the shortest path and merging consecutive edges of the same
+   travel mode.
 
 ```
 Walk along the footway for 375m (up 9.2m)
@@ -28,121 +42,117 @@ Climb the stairs for 102m (down 31.4m)
 Cross the road crossing for 8m
 Cross the footbridge for 48m
 Take the lift for 12m
-Go through the subway for 95m
 ```
 
-- **Visualises** everything in a web map (MapLibre 3D terrain + buildings +
-  full pedestrian network + street-name labels).
+The Hungarian (optimal 1-to-1) and greedy nearest-neighbour solvers remain
+available via `--mode hungarian` / `--mode greedy`.
 
-### Walking-cost penalties (so workers don't walk up the hill)
+---
+
+## 2. Pedestrian network use
+
+- Source: Lands Department **3D Pedestrian Network** — 465,475 route segments,
+  **1,430,759 nodes** and **2,996,289 directed edges** covering footways,
+  footpaths, stairs, lifts, escalators, footbridges, subways, crossings and
+  indoor passages.
+- `scripts/preprocess.py` converts the CSDI GeoJSON into a memory-mapped binary
+  graph (`data/graph.bin`) with CSR adjacency.
+- Every itinerary is a **sequence of real network nodes** — workers never walk
+  off-network and never take a straight-line shortcut across the map.
+- Walking cost penalises hills and stairs so routes prefer flat footways,
+  bridges, lifts and escalators:
 
 | Movement | Penalty |
 |---|---|
 | Flat footway | 1.0× length |
-| Uphill footway | **+5.0× ascent** |
-| Stairs (footsteps) | **+8.0× ascent** |
-| Steep footpath (>10% grade) | **×8** |
-| Lift | 10 m flat + 0.5× ascent (cheap) |
-| Escalator | ×0.5 (assisted) |
+| Uphill footway | +5.0× ascent |
+| Stairs | +8.0× ascent |
+| Steep footpath (>10% grade) | ×8 |
+| Lift | 10 m + 0.5× ascent |
+| Escalator | ×0.5 |
 
 ---
 
-## 2. 18-district coverage
+## 3. Estimated allocation time
 
-Officers and survey addresses are scattered across **all 18 districts**, using
-real street names grouped by district from the government Road Centreline
-dataset. Below are live snapshots of each district with its officers (blue),
-survey addresses (red) and walking routes (green).
+Measured on a 20-core machine (TBB enabled) against the full 1.43M-node graph.
 
-| Central and Western | Eastern | Southern |
-|---|---|---|
-| ![Central and Western](docs/districts/Central_and_Western.png) | ![Eastern](docs/districts/Eastern.png) | ![Southern](docs/districts/Southern.png) |
-
-| Wan Chai | Kowloon City | Yau Tsim Mong |
-|---|---|---|
-| ![Wan Chai](docs/districts/Wan_Chai.png) | ![Kowloon City](docs/districts/Kowloon_City.png) | ![Yau Tsim Mong](docs/districts/Yau_Tsim_Mong.png) |
-
-| Sham Shui Po | Wong Tai Sin | Kwun Tong |
-|---|---|---|
-| ![Sham Shui Po](docs/districts/Sham_Shui_Po.png) | ![Wong Tai Sin](docs/districts/Wong_Tai_Sin.png) | ![Kwun Tong](docs/districts/Kwun_Tong.png) |
-
-| Kwai Tsing | Tsuen Wan | Tuen Mun |
-|---|---|---|
-| ![Kwai Tsing](docs/districts/Kwai_Tsing.png) | ![Tsuen Wan](docs/districts/Tsuen_Wan.png) | ![Tuen Mun](docs/districts/Tuen_Mun.png) |
-
-| Yuen Long | North | Tai Po |
-|---|---|---|
-| ![Yuen Long](docs/districts/Yuen_Long.png) | ![North](docs/districts/North.png) | ![Tai Po](docs/districts/Tai_Po.png) |
-
-| Sha Tin | Sai Kung | Islands |
-|---|---|---|
-| ![Sha Tin](docs/districts/Sha_Tin.png) | ![Sai Kung](docs/districts/Sai_Kung.png) | ![Islands](docs/districts/Islands.png) |
-
----
-
-## 3. Estimated speed
-
-Measured on a 20-core machine (Intel i7-class, TBB enabled) against the full
-1,430,759-node / 2,996,289-edge network.
-
-### Benchmark: 30 officers × 200 addresses (all 18 districts)
+**Benchmark (measured): 30 officers × 200 addresses across 18 districts**
 
 | Stage | Time |
 |---|---|
-| Graph load (1.43M nodes, 3.0M edges) | ~1.1 s |
-| Snapping (R-tree) | <0.1 s |
+| Graph load (1.43M nodes / 3.0M edges) | ~1.1 s |
+| R-tree snapping | <0.1 s |
 | Distance matrix (30 parallel Dijkstra) | ~2.1 s |
 | Shortest-path geometry + narrative | ~3.0 s |
 | **Total** | **~5.1 s** |
 
-### Projection: 500 officers × 15,000 addresses
+**Projected scaling (the "sorting time" table)**
 
-| Stage | Estimated |
-|---|---|
-| Graph load + snapping | ~5 s |
-| Distance matrix (500 parallel Dijkstra) | ~35 s |
-| Shortest-path geometry (15,000 × ~15 ms, sequential) | ~3.75 min |
-| Narrative + GeoJSON write (~4 GB output) | ~1 min |
-| **Total** | **~5–6 minutes** |
+The distance matrix scales with the number of officers (parallelised), while
+the per-address shortest paths scale with the number of addresses (currently
+sequential at ~15 ms each) plus GeoJSON writing.
 
-**Bottleneck:** the per-route shortest-path loop is currently sequential. The
-same TBB parallel pattern used for the distance matrix would cut the 3.75 min
-to ~15–20 s, bringing the 500 × 15,000 total down to **~2 minutes**.
+| Officers | Addresses | Estimated wall-clock |
+|---|---|---|
+| 30 | 200 | ~5 s (measured) |
+| 100 | 1,000 | ~25 s |
+| 200 | 5,000 | ~2 min |
+| 500 | 10,000 | **~5–6 min** |
+| 500 | 15,000 | ~8–9 min |
 
-⚠️ For 15,000 routes the GeoJSON is ~4 GB — too large for one browser load.
-Use per-officer split files, vector tiles, or a database/API for that scale.
+**Bottleneck & speed-up:** the per-address shortest-path loop is sequential.
+Applying the same TBB parallel pattern used for the distance matrix cuts that
+stage by ~20×, bringing the 500 × 15,000 case from ~8–9 min down to **~2 min**.
+For that scale, output should be split per officer (the single GeoJSON reaches
+~4 GB at 15,000 routes) or written to a database/vector tiles.
 
 ---
 
-## 4. Quick start
+## 4. 3D visualisation (Firefox)
 
-### Build
+Use the 3D MapLibre viewer (not the 2D snapshot pages):
 
 ```bash
+python3 scripts/serve.py 8765
+# open in Firefox:
+# http://localhost:8765/scripts/map_viewer.html
+```
+
+**Steps:**
+
+1. Click an officer in the **left itinerary panel**.
+2. **Wait ~30 seconds** for the 3D buildings to load from the Overpass API
+   (they are fetched per viewport on the first pan/zoom).
+3. The map shows the officer's routes on the 3D terrain, with 3D buildings,
+   and the left panel shows each site's **"🚶 Directions"** — the turn-by-turn
+   walking narrative by footway / stairs / lift / escalator / footbridge /
+   subway / crossing.
+
+![Officer itinerary in the 3D viewer](docs/districts/3d_officer01.png)
+
+Toolbar toggles: 🛤️ routes · ▶ direction arrows · 🚶 full pedestrian network ·
+🏷️ street names · 🏢 3D buildings · ⛰️ terrain · 📍 sites.
+
+---
+
+## 5. Quick start
+
+```bash
+# 1. Build the engine
 cmake -S . -B build_native -G Ninja -DCMAKE_BUILD_TYPE=Release -DGEODIS_BUILD_VIEWER=OFF
 ninja -C build_native geodis
-```
 
-### Prepare the pedestrian network graph
-
-```bash
-# Convert the CSDI GeoJSON download to the binary graph:
+# 2. Convert the CSDI pedestrian-network download to the binary graph
 python3 scripts/preprocess.py data/pedestrian_route.json -o data/graph.bin
-```
 
-### Generate 18-district officers + addresses
-
-```bash
-# First group real street names by district from the government Road Centreline:
+# 3. Group real street names by the 18 districts (from the government Road Centreline)
 python3 scripts/build_street_districts.py
 
-# Then scatter 30 officers and 200 addresses across 18 districts:
+# 4. Generate 30 officers + 200 addresses across 18 districts
 python3 scripts/generate_district_data.py
-```
 
-### Run the allocation
-
-```bash
+# 5. Run the balanced cluster allocation
 ./build_native/geodis \
   --graph data/graph.bin \
   --officers data/test_officers_30.csv \
@@ -151,49 +161,41 @@ python3 scripts/generate_district_data.py
   --cluster-penalty 0.15 \
   --geojson scripts/routes.geojson \
   --output data/assignments_cluster.csv
+
+# 6. Visualise
+python3 scripts/serve.py 8765   # → http://localhost:8765/scripts/map_viewer.html
 ```
 
-### Visualise
-
-```bash
-python3 scripts/serve.py 8765
-# open http://localhost:8765/scripts/map_viewer.html
-```
-
-Click an officer to see their itinerary, then **"🚶 Directions"** for the
-turn-by-turn walking narrative. Use the **🚶 network** and **🏷 street-name**
-toggles to overlay the full pedestrian network.
+Input CSV (`name,address,lon,lat,z`); addresses use street name + district only,
+e.g. `CONNAUGHT ROAD CENTRAL, Central and Western`.
 
 ---
 
-## 5. Architecture
+## 6. Architecture
 
 ```
 geodis/
-├── CMakeLists.txt                     # CMake + Ninja build
+├── CMakeLists.txt                      # CMake + Ninja build
 ├── src/
-│   ├── main.cpp                       # CLI + GeoJSON/narrative output
-│   ├── spatial/
-│   │   ├── point3d.hpp                # 3D point, walking-cost model
-│   │   ├── coordinate_utils.hpp       # haversine, HK1980 conversion
-│   │   └── rtree_index.hpp/cpp        # R-tree snapping
-│   ├── graph/network_graph.hpp/cpp    # CSR graph + binary loader
-│   ├── routing/dijkstra.hpp/cpp       # 3D Dijkstra
-│   └── assignment/assignment_engine.hpp/cpp  # Hungarian / greedy / cluster
+│   ├── main.cpp                        # CLI, GeoJSON + narrative output
+│   ├── spatial/                        # point3d, haversine, R-tree, cost model
+│   ├── graph/network_graph.*           # CSR graph + binary loader
+│   ├── routing/dijkstra.*              # 3D Dijkstra
+│   └── assignment/assignment_engine.*  # Hungarian / greedy / balanced cluster
 ├── scripts/
-│   ├── preprocess.py                  # GeoJSON → binary graph
-│   ├── build_street_districts.py      # group Road Centreline names by district
-│   ├── generate_district_data.py      # 18-district officers + addresses
-│   ├── generate_network_data.py       # compact browser network.bin
-│   ├── serve.py                       # local HTTP server
-│   └── *.html                         # web viewers
-└── docs/districts/*.png               # 18-district snapshots
+│   ├── preprocess.py                   # GeoJSON → binary graph
+│   ├── build_street_districts.py       # group Road Centreline names by district
+│   ├── generate_district_data.py       # 18-district officers + addresses
+│   ├── generate_network_data.py        # compact browser network.bin
+│   ├── serve.py                        # local HTTP server
+│   └── *.html                          # 3D/2D web viewers
+└── docs/districts/*.png                # 3D viewer snapshots
 ```
 
-## 6. Data attribution
+## 7. Data attribution
 
 - 3D Pedestrian Network © Lands Department, HKSAR Government (CSDI Portal)
 - Road Centreline © Lands Department, HKSAR Government (CSDI Portal)
-- OpenStreetMap © OpenStreetMap contributors (base map tiles)
+- OpenStreetMap © OpenStreetMap contributors (base map tiles / buildings)
 
 Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

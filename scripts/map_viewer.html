@@ -90,24 +90,29 @@ const EO=['footway','stairs','lift','escalator','footbridge','subway','crossing'
 const leg=document.getElementById('leg');
 for(const t of EO)leg.innerHTML+=`<div class="lr"><div class="ls" style="background:${EC[t]}"></div>${t}</div>`;
 
-// ── Map (NO basemap — clean 3D scene) ────────────────────────────────────
+// ── Map ───────────────────────────────────────────────────────────────────
+// ?flat=1 (snapshot mode): OSM base + 3D buildings, no WebGL terrain —
+// much lighter for headless screenshots. Default keeps the 3D terrain.
+const FLAT=(new URLSearchParams(location.search)).get('flat')==='1';
+
+const mapStyle={version:8,glyphs:'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',sources:{},layers:[{id:'bg',type:'background',paint:{'background-color':'#0a0f18'}}]};
+if(FLAT){
+  mapStyle.sources.osm={type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,attribution:'&copy; OSM'};
+  mapStyle.layers.push({id:'osm',type:'raster',source:'osm'});
+}else{
+  mapStyle.sources.terrain={type:'raster-dem',tiles:['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],tileSize:256,encoding:'terrarium',minzoom:0,maxzoom:15};
+  mapStyle.layers.push({id:'hillshade',type:'hillshade',source:'terrain',paint:{'hillshade-exaggeration':.4,'hillshade-shadow-color':'#080c14','hillshade-highlight-color':'#1a3050','hillshade-accent-color':'#0a1628'}});
+  mapStyle.terrain={source:'terrain',exaggeration:1.5};
+}
+
 const map=new maplibregl.Map({
   container:'map',
-  style:{version:8,glyphs:'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
-    sources:{
-      terrain:{type:'raster-dem',tiles:['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],tileSize:256,encoding:'terrarium',minzoom:0,maxzoom:15}
-    },
-    layers:[
-      {id:'bg',type:'background',paint:{'background-color':'#080c14'}},
-      {id:'hillshade',type:'hillshade',source:'terrain',paint:{'hillshade-exaggeration':.4,'hillshade-shadow-color':'#080c14','hillshade-highlight-color':'#1a3050','hillshade-accent-color':'#0a1628'}}
-    ],
-    terrain:{source:'terrain',exaggeration:1.5}
-  },
-  center:[114.16,22.37],zoom:9.5,pitch:55,bearing:20,antialias:true
+  style:mapStyle,
+  center:[114.16,22.37],zoom:9.5,pitch:FLAT?0:55,bearing:FLAT?0:20,antialias:true
 });
 map.addControl(new maplibregl.NavigationControl(),'top-left');
 map.addControl(new maplibregl.ScaleControl({unit:'metric'}),'bottom-left');
-function toggleT(){const on=document.getElementById('ckT').checked;map.setTerrain(on?{source:'terrain',exaggeration:1.5}:null)}
+function toggleT(){const on=document.getElementById('ckT').checked;map.setTerrain(on&&!FLAT?{source:'terrain',exaggeration:1.5}:null)}
 function toggleB(){const on=document.getElementById('ckB').checked;if(bldgL&&map.getLayer(bldgL))map.setLayoutProperty(bldgL,'visibility',on?'visible':'none');if(on)fetchBldgs()}
 function updBh(){const m=parseInt(document.getElementById('bh').value);document.getElementById('bhv').textContent=m;if(bldgL&&map.getLayer(bldgL))map.setPaintProperty(bldgL,'fill-extrusion-height',['*',['coalesce',['to-number',['get','height']],15],m])}
 
@@ -541,9 +546,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')selectOfficer(null,n
 map.on('load',async()=>{
   console.log('Map style loaded, fetching routes.geojson...');
   await loadDefault('routes.geojson');
-  // Auto-load the full LandsD pedestrian network + street names if enabled
-  if(document.getElementById('ckN').checked)loadPedestrianNetwork();
-  if(document.getElementById('ckL').checked)loadStreetLabels();
+  // Auto-load the full LandsD pedestrian network + street names if enabled.
+  // Skip these heavy overlays in flat snapshot mode.
+  if(!FLAT){
+    if(document.getElementById('ckN').checked)loadPedestrianNetwork();
+    if(document.getElementById('ckL').checked)loadStreetLabels();
+  }
 });
 </script>
 </body>
