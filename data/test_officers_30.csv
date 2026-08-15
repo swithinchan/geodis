@@ -1,31 +1,31 @@
 name,address,lon,lat,z
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",114.13726660,22.26685828,233.1
-Officer_02,"Flat 35, Floor 6, Kingswood Villas, Java Road, Eastern",114.22995297,22.28208898,3.8
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",114.23430113,22.25516376,193.9
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",114.17267044,22.27549261,4.7
-Officer_05,"Flat 29, Floor 18, Tuen Mun Town Plaza, Sung Wong Toi Road, Kowloon City",114.17505882,22.31144234,32.4
-Officer_06,"Flat 22, Floor 18, Tai Po Centre, Canton Road, Yau Tsim Mong",114.17973304,22.32321719,30.6
-Officer_07,"Flat 7, Floor 6, Festival City, Lai Chi Kok Road, Sham Shui Po",114.16365831,22.34243256,101.3
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",114.18968385,22.34280350,37.4
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",114.22033452,22.33056079,127.4
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",114.11539128,22.36938373,4.5
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",114.12728502,22.36689710,42.3
-Officer_12,"Flat 25, Floor 18, Kingswood Villas, Tsing Wun Road, Tuen Mun",113.98608469,22.42061222,10.9
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",114.02772066,22.45442426,4.6
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",114.14096872,22.48839093,19.1
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",114.19905830,22.42538105,20.0
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",114.22206328,22.40648571,4.8
-Officer_17,"Flat 26, Floor 18, Festival City, Po Tung Road, Sai Kung",114.23990181,22.35601033,50.1
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",113.96044199,22.23844622,74.3
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",114.16247069,22.28168737,4.8
-Officer_20,"Flat 38, Floor 28, The Pavilia Hill, Java Road, Eastern",114.24739282,22.25536380,293.2
-Officer_21,"Flat 15, Floor 9, Sunshine City, Stanley Main Street, Southern",114.24302818,22.25327131,126.2
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",114.18574597,22.27029761,17.7
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",114.17697515,22.32090469,13.5
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",114.17203875,22.30124390,11.8
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",114.15653365,22.32058140,12.1
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",114.18768354,22.36447045,147.3
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",114.22583907,22.31365662,9.3
-Officer_28,"Flat 20, Floor 33, Kingswood Villas, Tsing Yi Road, Kwai Tsing",114.14848302,22.37705522,181.5
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",114.11098410,22.36716091,5.9
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",113.97611332,22.39911605,4.9
+Officer_01,"CONNAUGHT ROAD CENTRAL, Central and Western",114.13726660,22.26685828,233.1
+Officer_02,"WEST EMBANKMENT, Eastern",114.23921622,22.27845953,4.9
+Officer_03,"NAM NING STREET, Southern",114.15731258,22.24165239,38.3
+Officer_04,"GLASS STREET, Wan Chai",114.17068516,22.27574814,5.2
+Officer_05,"EARL STREET, Kowloon City",114.17006429,22.30056403,29.6
+Officer_06,"SHUN YEE STREET, Yau Tsim Mong",114.17702056,22.29779089,9.7
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",114.15959546,22.32002732,13.7
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",114.21341744,22.33744258,86.7
+Officer_09,"CHOI HEI ROAD, Kwun Tong",114.21079710,22.32266200,5.0
+Officer_10,"KWAI SHING CIRCUIT, Kwai Tsing",114.12844309,22.34524098,58.9
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",114.12209608,22.35982754,68.4
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",113.97253679,22.39788159,5.2
+Officer_13,"HUNG ON LANE, Yuen Long",114.03590813,22.44301902,7.0
+Officer_14,"WO TAI STREET, North",114.12327068,22.53171944,43.4
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",114.13752681,22.44486596,47.9
+Officer_16,"NING TAI ROAD, Sha Tin",114.18145812,22.37061997,6.1
+Officer_17,"WAN KING PATH, Sai Kung",114.26465674,22.37357433,32.7
+Officer_18,"DISCOVERY PEAK ROAD, Islands",114.03591042,22.28856389,5.3
+Officer_19,"PEAK ROAD, Central and Western",114.16172363,22.30417567,25.0
+Officer_20,"KAM HONG STREET, Eastern",114.19621700,22.27073584,193.0
+Officer_21,"MAIN STREET, AP LEI CHAU, Southern",114.18071068,22.25202642,51.4
+Officer_22,"EASTERN HOSPITAL ROAD, Wan Chai",114.17218897,22.26918482,171.0
+Officer_23,"PAK KUNG STREET, Kowloon City",114.17692669,22.33670660,19.9
+Officer_24,"IVY STREET, Yau Tsim Mong",114.18358290,22.30868170,8.2
+Officer_25,"LUNG CHU STREET, Sham Shui Po",114.17283313,22.34255900,115.2
+Officer_26,"CHUI CHUK STREET, Wong Tai Sin",114.18894923,22.35479982,359.8
+Officer_27,"SHUI NING STREET, Kwun Tong",114.25012785,22.31322437,202.9
+Officer_28,"PING LAI PATH, Kwai Tsing",114.13980655,22.35312634,181.0
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",114.12330961,22.36787783,16.7
+Officer_30,"TIN KING ROAD, Tuen Mun",113.98553067,22.42134964,10.4

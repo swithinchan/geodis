@@ -60,3 +60,7 @@ gemini.txt~
 
 # Backups
 *.bak
+
+# Reference notes and OSM fallback (not part of the government-data flow)
+gemini3.txt
+scripts/download_street_names.py

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>District Snapshot</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;font-family:system-ui,sans-serif;background:#0a0f18}
+  #map{position:absolute;inset:0}
+  #title{position:absolute;top:12px;left:12px;z-index:1000;background:rgba(10,16,32,.92);
+    color:#e8eef5;padding:8px 16px;border-radius:8px;border:1px solid #f0729a;font-size:16px;font-weight:700}
+  #title small{display:block;font-weight:400;font-size:11px;opacity:.65;margin-top:2px}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="title"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const params=new URLSearchParams(location.search);
+const name=params.get('name')||'Hong Kong';
+const lat=parseFloat(params.get('lat')||'22.37');
+const lon=parseFloat(params.get('lon')||'114.16');
+const zoom=parseFloat(params.get('zoom')||'12');
+
+document.getElementById('title').innerHTML=name+
+  `<small>Officers · Sites · Walking routes on LandsD pedestrian network</small>`;
+
+const map=L.map('map').setView([lat,lon],zoom);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OSM'}).addTo(map);
+
+let officerMarkers=[],siteMarkers=[],routeLayers=[];
+
+async function load(){
+  try{
+    const r=await fetch('routes.geojson');
+    const d=await r.json();
+    const feats=d.features||[];
+    const officers=feats.filter(f=>f.properties?.featureType==='officer');
+    const sites=feats.filter(f=>f.properties?.featureType==='site');
+    const routes=feats.filter(f=>f.properties?.featureType==='full-route');
+
+    // Filter to this district by the trailing address field
+    const inDistrict=addr=>(addr||'').endsWith(name);
+
+    const off=officers.filter(o=>inDistrict(o.properties.address));
+    const sit=sites.filter(s=>inDistrict(s.properties.address));
+    const rout=routes.filter(r=>inDistrict(r.properties.site_address)||inDistrict(r.properties.officer_address));
+
+    const b=L.latLngBounds();
+    for(const o of off){
+      const c=o.geometry.coordinates;
+      L.circleMarker([c[1],c[0]],{radius:7,fillColor:'#3b82f6',color:'#1d4ed8',weight:2,fillOpacity:.9})
+        .bindPopup(`<b>${o.properties.name}</b><br>${o.properties.address}`).addTo(map);
+      b.extend([c[1],c[0]]);
+    }
+    for(const s of sit){
+      const c=s.geometry.coordinates;
+      L.circleMarker([c[1],c[0]],{radius:4,fillColor:'#ef4444',color:'#b91c1c',weight:1,fillOpacity:.9})
+        .bindPopup(`<b>${s.properties.name}</b><br>${s.properties.address}`).addTo(map);
+      b.extend([c[1],c[0]]);
+    }
+    for(const r of rout){
+      const coords=r.geometry.coordinates.map(c=>[c[1],c[0]]);
+      L.polyline(coords,{color:'#4ade80',weight:2,opacity:.75})
+        .bindPopup(`<b>${r.properties.officer} → ${r.properties.site}</b><br>${Math.round(r.properties.walking_cost||0)}m`).addTo(map);
+      for(const c of coords)b.extend(c);
+    }
+    if(b.isValid())map.fitBounds(b,{padding:[40,40],maxZoom:14});
+    document.title=name+' — geodis';
+  }catch(e){
+    document.getElementById('title').innerHTML+=`<small style="color:#f87171">load failed: ${e.message}</small>`;
+  }
+}
+load();
+</script>
+</body>
+</html>

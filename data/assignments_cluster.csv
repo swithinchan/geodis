@@ -1,196 +1,187 @@
 officer_name,officer_address,site_name,site_address,walking_cost,walking_distance_m,straight_line_m
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-665-Site-037,"Block F, Floor 19, Metro Harbour View, Praya Kennedy Town, Central and Western",5565.7,5565.7,1946.6
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-851-Site-093,"Block G, Floor 6, South Horizons, Stanley Main Street, Southern",7531.1,7531.1,622.3
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-651-Site-145,"Block C, Floor 15, Waldorf Garden, Praya Kennedy Town, Central and Western",9469.1,9469.1,716.1
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-643-Site-199,"Block G, Floor 20, Festival City, Praya Kennedy Town, Central and Western",10840.6,10840.6,1356.7
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-976-Site-147,"Block G, Floor 8, Tuen Mun Town Plaza, Wong Chuk Hang Road, Southern",11906.9,11906.9,3610.9
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-384-Site-129,"Block H, Floor 30, Waldorf Garden, Wong Chuk Hang Road, Southern",14179.6,14179.6,2727.5
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-379-Site-075,"Block H, Floor 8, Tuen Mun Town Plaza, Pok Fu Lam Road, Southern",21339.2,21339.2,2265.0
-Officer_01,"Flat 18, Floor 16, Belcher Gardens, Connaught Road Central, Central and Western",TPU-421-Site-021,"Block A, Floor 24, Metro Harbour View, Wong Chuk Hang Road, Southern",26532.4,26532.4,4738.2
-Officer_02,"Flat 35, Floor 6, Kingswood Villas, Java Road, Eastern",TPU-904-Site-056,"Block D, Floor 14, Maritime Bay, Electric Road, Eastern",1740.3,1740.3,646.6
-Officer_02,"Flat 35, Floor 6, Kingswood Villas, Java Road, Eastern",TPU-473-Site-038,"Block A, Floor 10, South Horizons, Shau Kei Wan Road, Eastern",3269.5,3269.5,2570.1
-Officer_02,"Flat 35, Floor 6, Kingswood Villas, Java Road, Eastern",TPU-551-Site-111,"Block H, Floor 16, Maritime Bay, Pok Fu Lam Road, Southern",6071.9,6071.9,2092.1
-Officer_02,"Flat 35, Floor 6, Kingswood Villas, Java Road, Eastern",TPU-133-Site-183,"Block G, Floor 9, Waldorf Garden, Aberdeen Praya Road, Southern",33061.9,33061.9,4802.6
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",TPU-141-Site-128,"Block E, Floor 19, Belcher Gardens, Chai Wan Road, Eastern",3221.5,3221.5,692.9
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",TPU-524-Site-182,"Block C, Floor 29, Tai Po Centre, Chai Wan Road, Eastern",4672.4,4672.4,935.0
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",TPU-552-Site-057,"Block H, Floor 15, Festival City, Pok Fu Lam Road, Southern",4757.2,4757.2,1667.9
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",TPU-294-Site-020,"Block H, Floor 5, Tai Po Centre, Electric Road, Eastern",12009.3,12009.3,2386.4
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",TPU-993-Site-110,"Block H, Floor 4, South Horizons, Electric Road, Eastern",16657.3,16657.3,2654.4
-Officer_03,"Flat 2, Floor 6, Metro Harbour View, Stanley Main Street, Southern",TPU-170-Site-002,"Block H, Floor 27, City One Shatin, King's Road, Eastern",18535.1,18535.1,2701.6
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",TPU-627-Site-058,"Block B, Floor 10, Laguna City, Gloucester Road, Wan Chai",948.1,948.1,377.0
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",TPU-949-Site-166,"Block E, Floor 1, Maritime Bay, Queen's Road East, Wan Chai",1061.3,1061.3,671.8
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",TPU-784-Site-076,"Block G, Floor 11, Belcher Gardens, Gloucester Road, Wan Chai",1407.1,1407.1,1234.6
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",TPU-652-Site-004,"Block G, Floor 7, The Pavilia Hill, Lockhart Road, Wan Chai",1721.0,1721.0,1314.5
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",TPU-456-Site-130,"Block B, Floor 16, Waldorf Garden, Gloucester Road, Wan Chai",3057.5,3057.5,2431.4
-Officer_04,"Flat 36, Floor 13, Belcher Gardens, Lockhart Road, Wan Chai",TPU-661-Site-055,"Block E, Floor 13, Laguna City, Hollywood Road, Central and Western",5648.0,5648.0,4465.9
-Officer_05,"Flat 29, Floor 18, Tuen Mun Town Plaza, Sung Wong Toi Road, Kowloon City",TPU-906-Site-042,"Block E, Floor 6, Tuen Mun Town Plaza, Jordan Road, Yau Tsim Mong",643.6,643.6,163.0
-Officer_05,"Flat 29, Floor 18, Tuen Mun Town Plaza, Sung Wong Toi Road, Kowloon City",TPU-724-Site-096,"Block H, Floor 19, Tuen Mun Town Plaza, Jordan Road, Yau Tsim Mong",2134.0,2134.0,857.3
-Officer_05,"Flat 29, Floor 18, Tuen Mun Town Plaza, Sung Wong Toi Road, Kowloon City",TPU-417-Site-059,"Block D, Floor 22, City One Shatin, To Kwa Wan Road, Kowloon City",2692.7,2692.7,240.8
-Officer_05,"Flat 29, Floor 18, Tuen Mun Town Plaza, Sung Wong Toi Road, Kowloon City",TPU-778-Site-186,"Block H, Floor 3, Kingswood Villas, Canton Road, Yau Tsim Mong",2829.8,2829.8,1161.4
-Officer_06,"Flat 22, Floor 18, Tai Po Centre, Canton Road, Yau Tsim Mong",TPU-690-Site-113,"Block H, Floor 3, Park Island, Argyle Street, Kowloon City",1276.4,1276.4,640.0
-Officer_06,"Flat 22, Floor 18, Tai Po Centre, Canton Road, Yau Tsim Mong",TPU-229-Site-149,"Block H, Floor 2, South Horizons, Sung Wong Toi Road, Kowloon City",2201.0,2201.0,799.9
-Officer_06,"Flat 22, Floor 18, Tai Po Centre, Canton Road, Yau Tsim Mong",TPU-918-Site-168,"Block E, Floor 25, Waldorf Garden, Kimberley Road, Yau Tsim Mong",2240.2,2240.2,742.7
-Officer_06,"Flat 22, Floor 18, Tai Po Centre, Canton Road, Yau Tsim Mong",TPU-676-Site-114,"Block C, Floor 26, South Horizons, Nathan Road, Yau Tsim Mong",7750.8,7750.8,2852.9
-Officer_07,"Flat 7, Floor 6, Festival City, Lai Chi Kok Road, Sham Shui Po",TPU-507-Site-185,"Block F, Floor 2, Sunshine City, Argyle Street, Kowloon City",1820.8,1820.8,1023.7
-Officer_07,"Flat 7, Floor 6, Festival City, Lai Chi Kok Road, Sham Shui Po",TPU-247-Site-151,"Block A, Floor 24, New Town Plaza, Cheung Sha Wan Road, Sham Shui Po",2427.6,2427.6,1208.4
-Officer_07,"Flat 7, Floor 6, Festival City, Lai Chi Kok Road, Sham Shui Po",TPU-882-Site-115,"Block B, Floor 18, Tuen Mun Town Plaza, Cheung Sha Wan Road, Sham Shui Po",2730.1,2730.1,1094.2
-Officer_07,"Flat 7, Floor 6, Festival City, Lai Chi Kok Road, Sham Shui Po",TPU-776-Site-190,"Block C, Floor 4, The Pavilia Hill, Tsing Yi Road, Kwai Tsing",9437.2,9437.2,2938.8
-Officer_07,"Flat 7, Floor 6, Festival City, Lai Chi Kok Road, Sham Shui Po",TPU-492-Site-070,"Block C, Floor 8, South Horizons, Sha Tin Centre Street, Sha Tin",13540.6,13540.6,1959.5
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-371-Site-152,"Block H, Floor 26, City One Shatin, Choi Hung Road, Wong Tai Sin",105.8,105.8,56.1
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-553-Site-116,"Block H, Floor 30, Park Island, Choi Hung Road, Wong Tai Sin",1126.4,1126.4,843.1
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-435-Site-080,"Block E, Floor 13, Metro Harbour View, Choi Hung Road, Wong Tai Sin",1235.0,1235.0,885.6
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-264-Site-131,"Block B, Floor 28, Festival City, To Kwa Wan Road, Kowloon City",1344.6,1344.6,562.9
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-990-Site-134,"Block A, Floor 22, Park Island, Lung Cheung Road, Wong Tai Sin",1614.7,1614.7,921.4
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-916-Site-098,"Block D, Floor 12, Waldorf Garden, Choi Hung Road, Wong Tai Sin",1725.9,1725.9,968.3
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-132-Site-008,"Block D, Floor 3, Metro Harbour View, Lung Cheung Road, Wong Tai Sin",1764.2,1764.2,1200.1
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-982-Site-023,"Block B, Floor 22, City One Shatin, Prince Edward Road West, Kowloon City",2190.9,2190.9,853.1
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-907-Site-170,"Block A, Floor 10, Kingswood Villas, Choi Hung Road, Wong Tai Sin",2516.7,2516.7,1424.0
-Officer_08,"Flat 23, Floor 17, Sunshine City, Lung Cheung Road, Wong Tai Sin",TPU-349-Site-062,"Block H, Floor 13, Park Island, Choi Hung Road, Wong Tai Sin",5134.8,5134.8,2614.0
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-234-Site-026,"Block E, Floor 13, Tuen Mun Town Plaza, Fung Tak Road, Wong Tai Sin",2324.7,2324.7,393.3
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-952-Site-107,"Block E, Floor 4, The Pavilia Hill, Man Nin Street, Sai Kung",5997.2,5997.2,2474.2
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-243-Site-179,"Block G, Floor 4, Maritime Bay, Man Nin Street, Sai Kung",8528.9,8528.9,4091.8
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-402-Site-171,"Block C, Floor 3, Sunshine City, Kwun Tong Road, Kwun Tong",9070.0,9070.0,3278.6
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-857-Site-117,"Block A, Floor 20, Maritime Bay, Lei Yue Mun Road, Kwun Tong",9105.8,9105.8,3628.9
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-790-Site-153,"Block F, Floor 28, City One Shatin, Lei Yue Mun Road, Kwun Tong",9823.2,9823.2,3816.5
-Officer_09,"Flat 25, Floor 6, Kingswood Villas, Lei Yue Mun Road, Kwun Tong",TPU-652-Site-125,"Block E, Floor 17, Park Island, Fuk Man Road, Sai Kung",24578.8,24578.8,3850.7
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-654-Site-154,"Block H, Floor 28, Festival City, Hing Fong Road, Kwai Tsing",1208.4,1208.4,685.5
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-367-Site-047,"Block B, Floor 29, Belcher Gardens, Sha Tsui Road, Tsuen Wan",1791.2,1791.2,874.9
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-905-Site-172,"Block D, Floor 5, Laguna City, Hing Fong Road, Kwai Tsing",2578.1,2578.1,1660.2
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-371-Site-028,"Block D, Floor 17, City One Shatin, Kwai Chung Road, Kwai Tsing",2669.7,2669.7,797.4
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-541-Site-011,"Block B, Floor 22, Kingswood Villas, Tai Ho Road, Tsuen Wan",2913.3,2913.3,808.9
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-183-Site-118,"Block E, Floor 22, Mei Foo Sun Chuen, Tsing Yi Road, Kwai Tsing",6036.4,6036.4,2974.9
-Officer_10,"Flat 37, Floor 13, Sunshine City, Cheung Hong Street, Kwai Tsing",TPU-944-Site-173,"Block C, Floor 9, The Pavilia Hill, Sha Tsui Road, Tsuen Wan",12773.2,12773.2,3268.6
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-584-Site-010,"Block D, Floor 26, Waldorf Garden, Tsing Yi Road, Kwai Tsing",795.9,795.9,275.6
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-102-Site-119,"Block B, Floor 6, Laguna City, Tai Ho Road, Tsuen Wan",2033.5,2033.5,857.2
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-373-Site-136,"Block A, Floor 7, New Town Plaza, Hing Fong Road, Kwai Tsing",2395.8,2395.8,982.7
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-391-Site-029,"Block D, Floor 12, City One Shatin, Sha Tsui Road, Tsuen Wan",2505.7,2505.7,598.6
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-119-Site-082,"Block B, Floor 16, The Pavilia Hill, Hing Fong Road, Kwai Tsing",2650.5,2650.5,833.3
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-621-Site-046,"Block F, Floor 21, The Pavilia Hill, Kwai Chung Road, Kwai Tsing",2888.5,2888.5,496.3
-Officer_11,"Flat 19, Floor 6, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",TPU-968-Site-064,"Block D, Floor 30, Metro Harbour View, Hing Fong Road, Kwai Tsing",3168.4,3168.4,1367.0
-Officer_12,"Flat 25, Floor 18, Kingswood Villas, Tsing Wun Road, Tuen Mun",TPU-846-Site-012,"Block H, Floor 28, Tai Po Centre, Pui To Road, Tuen Mun",1885.8,1885.8,1317.5
-Officer_12,"Flat 25, Floor 18, Kingswood Villas, Tsing Wun Road, Tuen Mun",TPU-337-Site-120,"Block E, Floor 2, Waldorf Garden, Pui To Road, Tuen Mun",2347.2,2347.2,873.7
-Officer_12,"Flat 25, Floor 18, Kingswood Villas, Tsing Wun Road, Tuen Mun",TPU-961-Site-139,"Block B, Floor 8, Tai Po Centre, Yuen Long Main Road, Yuen Long",2437.0,2437.0,1302.1
-Officer_12,"Flat 25, Floor 18, Kingswood Villas, Tsing Wun Road, Tuen Mun",TPU-785-Site-085,"Block C, Floor 16, Tuen Mun Town Plaza, Kau Yuk Road, Yuen Long",13993.6,13993.6,6086.2
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-909-Site-175,"Block F, Floor 3, Park Island, Kau Yuk Road, Yuen Long",1195.1,1195.1,728.1
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-869-Site-067,"Block H, Floor 9, Waldorf Garden, Kau Yuk Road, Yuen Long",1488.5,1488.5,1070.9
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-643-Site-103,"Block H, Floor 18, Sunshine City, Tai Tong Road, Yuen Long",2036.0,2036.0,1454.5
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-339-Site-121,"Block B, Floor 22, New Town Plaza, Tai Tong Road, Yuen Long",2846.9,2846.9,2059.9
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-218-Site-031,"Block C, Floor 9, Kingswood Villas, Tai Tong Road, Yuen Long",3021.7,3021.7,2280.6
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-157-Site-157,"Block F, Floor 26, Metro Harbour View, Yuen Long Main Road, Yuen Long",3762.6,3762.6,2378.8
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-559-Site-193,"Block B, Floor 16, Kingswood Villas, Ma Tin Road, Yuen Long",4635.7,4635.7,3082.5
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-690-Site-049,"Block B, Floor 13, Tai Po Centre, Tai Tong Road, Yuen Long",4705.8,4705.8,3151.9
-Officer_13,"Flat 24, Floor 23, Laguna City, Tai Tong Road, Yuen Long",TPU-447-Site-013,"Block G, Floor 24, Metro Harbour View, Yuen Long Main Road, Yuen Long",5408.9,5408.9,3034.2
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-550-Site-068,"Block D, Floor 9, Waldorf Garden, Luen On Street, North",901.5,901.5,668.8
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-477-Site-176,"Block B, Floor 15, The Pavilia Hill, Sha Tau Kok Road, North",2632.8,2632.8,1791.7
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-144-Site-194,"Block D, Floor 20, New Town Plaza, Sha Tau Kok Road, North",2796.7,2796.7,2231.7
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-350-Site-158,"Block G, Floor 5, Sunshine City, Luen On Street, North",3519.5,3519.5,2409.0
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-330-Site-122,"Block B, Floor 18, Tai Po Centre, San Fung Avenue, North",3698.9,3698.9,2965.5
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-427-Site-069,"Block E, Floor 11, Tuen Mun Town Plaza, On Chee Road, Tai Po",6027.2,6027.2,2862.0
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-692-Site-087,"Block E, Floor 4, Laguna City, Kwong Fuk Road, Tai Po",6505.7,6505.7,3989.0
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-315-Site-032,"Block E, Floor 20, The Pavilia Hill, San Fung Avenue, North",6644.9,6644.9,4740.3
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-559-Site-014,"Block D, Floor 18, Mei Foo Sun Chuen, San Fung Avenue, North",6649.1,6649.1,4626.1
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-833-Site-140,"Block C, Floor 16, Kingswood Villas, Fanling Station Road, North",6854.5,6854.5,4963.8
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-477-Site-086,"Block E, Floor 25, New Town Plaza, San Fung Avenue, North",7052.1,7052.1,5121.8
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-564-Site-104,"Block F, Floor 23, Festival City, Fanling Station Road, North",7307.9,7307.9,4559.2
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-632-Site-050,"Block G, Floor 1, Metro Harbour View, Luen On Street, North",7724.8,7724.8,576.5
-Officer_14,"Flat 39, Floor 11, City One Shatin, Luen On Street, North",TPU-339-Site-177,"Block B, Floor 22, Sunshine City, Ting Kok Road, Tai Po",9043.4,9043.4,5147.2
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-269-Site-123,"Block B, Floor 2, South Horizons, On Chee Road, Tai Po",5337.3,5337.3,2235.4
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-966-Site-033,"Block H, Floor 9, The Pavilia Hill, Tai Po Tai Wo Road, Tai Po",6445.1,6445.1,3523.2
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-349-Site-141,"Block H, Floor 16, Tai Po Centre, On Chee Road, Tai Po",7724.5,7724.5,4330.3
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-355-Site-015,"Block E, Floor 15, Laguna City, Ting Kok Road, Tai Po",8781.1,8781.1,4346.5
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-303-Site-088,"Block G, Floor 23, Park Island, Tin Sam Street, Sha Tin",8820.4,8820.4,821.7
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-180-Site-159,"Block C, Floor 6, Laguna City, Ting Kok Road, Tai Po",9904.4,9904.4,4821.3
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-838-Site-105,"Block D, Floor 4, The Pavilia Hill, On Chee Road, Tai Po",10516.1,10516.1,5108.7
-Officer_15,"Flat 30, Floor 25, Laguna City, Tai Po Tai Wo Road, Tai Po",TPU-590-Site-195,"Block A, Floor 2, New Town Plaza, On Chee Road, Tai Po",11018.8,11018.8,4867.5
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",TPU-416-Site-052,"Block E, Floor 17, Kingswood Villas, Tin Sam Street, Sha Tin",3157.0,3157.0,2307.2
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",TPU-103-Site-034,"Block E, Floor 2, Tai Po Centre, Sha Tin Centre Street, Sha Tin",4731.0,4731.0,1838.5
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",TPU-321-Site-106,"Block C, Floor 7, Kingswood Villas, Tin Sam Street, Sha Tin",5514.5,5514.5,3043.3
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",TPU-164-Site-178,"Block D, Floor 21, Festival City, Sha Tin Centre Street, Sha Tin",11469.7,11469.7,5394.4
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",TPU-767-Site-016,"Block B, Floor 2, New Town Plaza, Sha Tin Centre Street, Sha Tin",21268.7,21268.7,3828.1
-Officer_16,"Flat 4, Floor 15, Festival City, Tai Po Road, Sha Tin",TPU-780-Site-051,"Block G, Floor 3, Sunshine City, Tai Po Tai Wo Road, Tai Po",31577.8,31577.8,5463.7
-Officer_17,"Flat 26, Floor 18, Festival City, Po Tung Road, Sai Kung",TPU-908-Site-143,"Block E, Floor 25, City One Shatin, Hiram's Highway, Sai Kung",2450.6,2450.6,1621.2
-Officer_17,"Flat 26, Floor 18, Festival City, Po Tung Road, Sai Kung",TPU-552-Site-035,"Block C, Floor 24, The Pavilia Hill, Hiram's Highway, Sai Kung",6540.1,6540.1,1915.7
-Officer_17,"Flat 26, Floor 18, Festival City, Po Tung Road, Sai Kung",TPU-402-Site-053,"Block G, Floor 23, Festival City, Man Nin Street, Sai Kung",9027.4,9027.4,832.3
-Officer_17,"Flat 26, Floor 18, Festival City, Po Tung Road, Sai Kung",TPU-569-Site-027,"Block B, Floor 1, Festival City, Lei Yue Mun Road, Kwun Tong",9201.9,9201.9,4031.7
-Officer_17,"Flat 26, Floor 18, Festival City, Po Tung Road, Sai Kung",TPU-516-Site-017,"Block D, Floor 6, City One Shatin, Po Tung Road, Sai Kung",10803.8,10803.8,3819.5
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-843-Site-144,"Block A, Floor 10, The Pavilia Hill, Peng Chau Wing On Street, Islands",16582.0,16582.0,2911.0
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-659-Site-162,"Block E, Floor 22, New Town Plaza, Tung Chung Road, Islands",21216.0,21216.0,5272.0
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-542-Site-126,"Block A, Floor 29, City One Shatin, Mui Wo Ferry Pier Road, Islands",25267.6,25267.6,11740.8
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-807-Site-036,"Block B, Floor 3, Belcher Gardens, Mui Wo Ferry Pier Road, Islands",37136.4,37136.4,5111.8
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-748-Site-198,"Block E, Floor 20, South Horizons, Tung Chung Road, Islands",37595.9,37595.9,5399.7
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-409-Site-108,"Block F, Floor 6, Tuen Mun Town Plaza, Peng Chau Wing On Street, Islands",38067.2,38067.2,5774.4
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-488-Site-054,"Block G, Floor 22, Mei Foo Sun Chuen, Cheung Chau Praya Road, Islands",40164.8,40164.8,6417.1
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-952-Site-072,"Block A, Floor 7, Tai Po Centre, Mui Wo Ferry Pier Road, Islands",44731.9,44731.9,8706.5
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-538-Site-090,"Block F, Floor 18, Metro Harbour View, Tung Chung Road, Islands",45563.3,45563.3,8532.2
-Officer_18,"Flat 14, Floor 32, Festival City, Cheung Chau Praya Road, Islands",TPU-160-Site-018,"Block G, Floor 29, Mei Foo Sun Chuen, Mui Wo Ferry Pier Road, Islands",53158.8,53158.8,9968.3
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-334-Site-127,"Block A, Floor 3, The Pavilia Hill, Queen's Road West, Central and Western",1008.8,1008.8,184.8
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-342-Site-040,"Block C, Floor 30, Tai Po Centre, Queen's Road East, Wan Chai",1100.2,1100.2,273.5
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-902-Site-019,"Block G, Floor 9, Belcher Gardens, Belcher's Street, Central and Western",1792.0,1792.0,1296.8
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-479-Site-181,"Block G, Floor 15, South Horizons, Praya Kennedy Town, Central and Western",3361.7,3361.7,1175.6
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-346-Site-001,"Block D, Floor 2, Maritime Bay, Queen's Road West, Central and Western",3793.7,3793.7,2124.3
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-155-Site-109,"Block E, Floor 2, South Horizons, Hollywood Road, Central and Western",4615.2,4615.2,3687.0
-Officer_19,"Flat 10, Floor 17, New Town Plaza, Hollywood Road, Central and Western",TPU-620-Site-022,"Block C, Floor 2, Waldorf Garden, Hennessy Road, Wan Chai",5347.5,5347.5,897.3
-Officer_20,"Flat 38, Floor 28, The Pavilia Hill, Java Road, Eastern",TPU-409-Site-164,"Block H, Floor 28, The Pavilia Hill, Shau Kei Wan Road, Eastern",29330.5,29330.5,5159.9
-Officer_21,"Flat 15, Floor 9, Sunshine City, Stanley Main Street, Southern",TPU-429-Site-146,"Block G, Floor 15, Festival City, Electric Road, Eastern",16518.9,16518.9,3125.8
-Officer_21,"Flat 15, Floor 9, Sunshine City, Stanley Main Street, Southern",TPU-490-Site-165,"Block B, Floor 8, Waldorf Garden, Stanley Main Street, Southern",23680.8,23680.8,5283.9
-Officer_21,"Flat 15, Floor 9, Sunshine City, Stanley Main Street, Southern",TPU-750-Site-092,"Block G, Floor 12, Kingswood Villas, Shau Kei Wan Road, Eastern",34557.6,34557.6,4670.1
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",TPU-945-Site-094,"Block H, Floor 14, Waldorf Garden, Queen's Road East, Wan Chai",857.8,857.8,280.5
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",TPU-975-Site-184,"Block H, Floor 8, New Town Plaza, Lockhart Road, Wan Chai",2383.0,2383.0,1067.6
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",TPU-930-Site-148,"Block H, Floor 23, Festival City, Hennessy Road, Wan Chai",2792.0,2792.0,1580.8
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",TPU-865-Site-074,"Block G, Floor 18, Park Island, Electric Road, Eastern",13545.0,13545.0,1531.7
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",TPU-589-Site-112,"Block E, Floor 28, Metro Harbour View, Lockhart Road, Wan Chai",13839.8,13839.8,851.7
-Officer_22,"Flat 4, Floor 8, City One Shatin, Gloucester Road, Wan Chai",TPU-586-Site-003,"Block C, Floor 22, South Horizons, Pok Fu Lam Road, Southern",16584.0,16584.0,2630.7
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-765-Site-005,"Block G, Floor 22, Maritime Bay, Prince Edward Road West, Kowloon City",274.2,274.2,68.2
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-971-Site-097,"Block A, Floor 16, Festival City, Pei Ho Street, Sham Shui Po",966.2,966.2,763.2
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-708-Site-024,"Block D, Floor 19, Kingswood Villas, Jordan Road, Yau Tsim Mong",1054.1,1054.1,800.1
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-230-Site-077,"Block H, Floor 30, Laguna City, Sung Wong Toi Road, Kowloon City",1169.2,1169.2,927.5
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-350-Site-060,"Block A, Floor 2, South Horizons, Canton Road, Yau Tsim Mong",1276.9,1276.9,1007.1
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-987-Site-079,"Block G, Floor 5, City One Shatin, Cheung Sha Wan Road, Sham Shui Po",1336.9,1336.9,1049.8
-Officer_23,"Flat 39, Floor 5, Tai Po Centre, Prince Edward Road West, Kowloon City",TPU-985-Site-167,"Block A, Floor 19, The Pavilia Hill, Sung Wong Toi Road, Kowloon City",1675.0,1675.0,1218.0
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-330-Site-006,"Block B, Floor 8, New Town Plaza, Jordan Road, Yau Tsim Mong",374.1,374.1,135.3
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-188-Site-095,"Block D, Floor 27, Festival City, To Kwa Wan Road, Kowloon City",540.5,540.5,370.5
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-510-Site-132,"Block E, Floor 22, Waldorf Garden, Jordan Road, Yau Tsim Mong",1174.9,1174.9,996.5
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-965-Site-150,"Block B, Floor 28, Festival City, Kimberley Road, Yau Tsim Mong",1384.6,1384.6,757.6
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-969-Site-091,"Block F, Floor 1, City One Shatin, Queen's Road West, Central and Western",2502.0,2502.0,1486.8
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-283-Site-041,"Block G, Floor 1, Laguna City, Prince Edward Road West, Kowloon City",2528.3,2528.3,1560.0
-Officer_24,"Flat 34, Floor 17, New Town Plaza, Jordan Road, Yau Tsim Mong",TPU-677-Site-078,"Block G, Floor 19, Belcher Gardens, Kimberley Road, Yau Tsim Mong",4895.5,4895.5,1117.1
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-358-Site-133,"Block B, Floor 11, New Town Plaza, Cheung Sha Wan Road, Sham Shui Po",149.1,149.1,49.5
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-581-Site-043,"Block A, Floor 28, Park Island, Cheung Sha Wan Road, Sham Shui Po",415.7,415.7,280.5
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-356-Site-169,"Block D, Floor 20, Tuen Mun Town Plaza, Tai Po Road, Sham Shui Po",1513.7,1513.7,788.8
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-744-Site-061,"Block G, Floor 29, New Town Plaza, Cheung Sha Wan Road, Sham Shui Po",2302.9,2302.9,1289.6
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-228-Site-187,"Block F, Floor 8, Metro Harbour View, Cheung Sha Wan Road, Sham Shui Po",2722.2,2722.2,1547.8
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-325-Site-007,"Block D, Floor 19, Belcher Gardens, Tai Po Road, Sham Shui Po",4802.4,4802.4,2334.1
-Officer_25,"Flat 35, Floor 18, Kingswood Villas, Cheung Sha Wan Road, Sham Shui Po",TPU-367-Site-025,"Block F, Floor 30, Tai Po Centre, Cheung Sha Wan Road, Sham Shui Po",5133.7,5133.7,2503.1
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",TPU-713-Site-142,"Block D, Floor 30, Park Island, Tai Po Road, Sha Tin",6491.5,6491.5,1109.9
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",TPU-940-Site-044,"Block F, Floor 10, New Town Plaza, Choi Hung Road, Wong Tai Sin",8732.9,8732.9,555.9
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",TPU-829-Site-196,"Block B, Floor 16, Tai Po Centre, Kong Pui Street, Sha Tin",12800.8,12800.8,2674.9
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",TPU-321-Site-188,"Block D, Floor 19, City One Shatin, Choi Hung Road, Wong Tai Sin",25210.6,25210.6,1111.0
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",TPU-697-Site-160,"Block H, Floor 30, Tuen Mun Town Plaza, Kong Pui Street, Sha Tin",27753.2,27753.2,1459.8
-Officer_26,"Flat 19, Floor 28, Kingswood Villas, Fung Tak Road, Wong Tai Sin",TPU-579-Site-124,"Block H, Floor 4, Maritime Bay, Tin Sam Street, Sha Tin",36903.2,36903.2,6624.1
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-800-Site-089,"Block E, Floor 28, Kingswood Villas, Hiram's Highway, Sai Kung",742.8,742.8,451.1
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-280-Site-063,"Block G, Floor 8, Kingswood Villas, Kwun Tong Road, Kwun Tong",931.7,931.7,658.3
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-488-Site-081,"Block F, Floor 25, Festival City, Lei Yue Mun Road, Kwun Tong",1382.4,1382.4,943.8
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-630-Site-135,"Block A, Floor 7, Tai Po Centre, Lei Yue Mun Road, Kwun Tong",1575.8,1575.8,1099.3
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-818-Site-200,"Block B, Floor 26, Tai Po Centre, Shau Kei Wan Road, Eastern",2235.6,2235.6,1658.2
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-361-Site-161,"Block E, Floor 15, New Town Plaza, Hiram's Highway, Sai Kung",2747.5,2747.5,1024.2
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-110-Site-099,"Block E, Floor 18, The Pavilia Hill, Ngau Tau Kok Road, Kwun Tong",2833.8,2833.8,1687.7
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-436-Site-045,"Block D, Floor 13, Belcher Gardens, Hip Wo Street, Kwun Tong",2914.6,2914.6,1264.9
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-979-Site-189,"Block A, Floor 9, South Horizons, Ngau Tau Kok Road, Kwun Tong",3879.5,3879.5,1497.7
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-722-Site-197,"Block B, Floor 11, City One Shatin, Man Nin Street, Sai Kung",8880.5,8880.5,4004.3
-Officer_27,"Flat 17, Floor 33, Belcher Gardens, Lei Yue Mun Road, Kwun Tong",TPU-597-Site-009,"Block E, Floor 22, Tuen Mun Town Plaza, Kwun Tong Road, Kwun Tong",9587.7,9587.7,3695.5
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-911-Site-101,"Block H, Floor 15, Waldorf Garden, Tai Ho Road, Tsuen Wan",645.8,645.8,412.5
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-516-Site-100,"Block D, Floor 24, City One Shatin, Tsing Yi Road, Kwai Tsing",1254.2,1254.2,819.2
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-864-Site-155,"Block E, Floor 8, Tuen Mun Town Plaza, Castle Peak Road, Tsuen Wan",3370.8,3370.8,1387.2
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-907-Site-191,"Block F, Floor 26, Belcher Gardens, Tai Ho Road, Tsuen Wan",3573.9,3573.9,1071.4
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-643-Site-065,"Block H, Floor 22, South Horizons, Yeung Uk Road, Tsuen Wan",4486.5,4486.5,1311.0
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-815-Site-137,"Block H, Floor 29, Maritime Bay, Tai Ho Road, Tsuen Wan",9034.6,9034.6,1566.1
-Officer_29,"Flat 24, Floor 11, South Horizons, Tai Ho Road, Tsuen Wan",TPU-170-Site-083,"Block D, Floor 21, Sunshine City, Castle Peak Road, Tsuen Wan",13271.7,13271.7,3469.8
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-661-Site-066,"Block G, Floor 27, New Town Plaza, Wu Chui Road, Tuen Mun",684.6,684.6,332.3
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-959-Site-084,"Block D, Floor 7, Belcher Gardens, Tuen Mun Heung Sze Wui Road, Tuen Mun",1321.8,1321.8,714.2
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-153-Site-192,"Block C, Floor 9, Belcher Gardens, Wu Chui Road, Tuen Mun",1446.2,1446.2,1031.4
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-270-Site-156,"Block B, Floor 15, Kingswood Villas, Pui To Road, Tuen Mun",2514.9,2514.9,1819.9
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-808-Site-102,"Block D, Floor 13, Maritime Bay, Tuen Mun Heung Sze Wui Road, Tuen Mun",2882.5,2882.5,1398.1
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-936-Site-030,"Block A, Floor 22, Maritime Bay, Pui To Road, Tuen Mun",3518.0,3518.0,2756.4
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-544-Site-048,"Block B, Floor 20, Metro Harbour View, Wu Chui Road, Tuen Mun",4209.5,4209.5,3091.3
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-177-Site-174,"Block B, Floor 15, Festival City, Wu Chui Road, Tuen Mun",5426.8,5426.8,3414.8
-Officer_30,"Flat 32, Floor 2, Festival City, Tuen Mun Heung Sze Wui Road, Tuen Mun",TPU-262-Site-138,"Block D, Floor 23, Belcher Gardens, Tuen Mun Heung Sze Wui Road, Tuen Mun",6948.7,6948.7,4025.4
+Officer_01,"CONNAUGHT ROAD CENTRAL, Central and Western",TPU-373-Site-145,"KA ON STREET, Central and Western",4383.3,4383.3,386.9
+Officer_01,"CONNAUGHT ROAD CENTRAL, Central and Western",TPU-789-Site-073,"CASTLE STEPS, Central and Western",12262.0,12262.0,1456.3
+Officer_01,"CONNAUGHT ROAD CENTRAL, Central and Western",TPU-145-Site-127,"KWAI WA LANE, Central and Western",14071.8,14071.8,2606.8
+Officer_01,"CONNAUGHT ROAD CENTRAL, Central and Western",TPU-821-Site-001,"GUTZLAFF STREET, Central and Western",20848.5,20848.5,994.9
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-777-Site-002,"CHEUNG LEE STREET, Eastern",2289.8,2289.8,1574.5
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-825-Site-164,"CHEUNG LEE STREET, Eastern",2769.1,2769.1,1606.7
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-783-Site-200,"PO LUEN PATH, Eastern",3086.3,3086.3,2227.9
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-845-Site-075,"STANLEY NEW STREET, Southern",3892.5,3892.5,2015.8
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-889-Site-128,"LEI KING ROAD, Eastern",8616.4,8616.4,1463.7
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-723-Site-039,"WAI FUNG STREET, Southern",10597.3,10597.3,3249.4
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-853-Site-093,"YUE LEI STREET, Southern",11308.9,11308.9,2506.1
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-651-Site-020,"SIU SAI WAN ROAD, Eastern",12382.3,12382.3,546.2
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-912-Site-182,"QUARRY BAY STREET, Eastern",13003.0,13003.0,2483.2
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-181-Site-003,"RED HILL ROAD, Southern",15920.4,15920.4,3718.1
+Officer_02,"WEST EMBANKMENT, Eastern",TPU-223-Site-057,"TUNG TAU WAN DRIVE, Southern",19013.9,19013.9,3086.7
+Officer_03,"NAM NING STREET, Southern",TPU-538-Site-021,"YUE ON COURT ROAD, Southern",2038.2,2038.2,894.7
+Officer_03,"NAM NING STREET, Southern",TPU-265-Site-129,"PAK PAT SHAN ROAD, Southern",4995.1,4995.1,726.5
+Officer_03,"NAM NING STREET, Southern",TPU-650-Site-111,"CARMEL ROAD, Southern",6199.2,6199.2,2799.9
+Officer_03,"NAM NING STREET, Southern",TPU-993-Site-147,"STANLEY BEACH ROAD, Southern",6612.0,6612.0,2289.7
+Officer_04,"GLASS STREET, Wan Chai",TPU-165-Site-058,"KING KWONG STREET, Wan Chai",122.0,122.0,101.2
+Officer_04,"GLASS STREET, Wan Chai",TPU-489-Site-004,"EAST POINT ROAD, Wan Chai",313.3,313.3,202.8
+Officer_04,"GLASS STREET, Wan Chai",TPU-371-Site-112,"TUNG SHAN TERRACE, Wan Chai",495.9,495.9,334.2
+Officer_04,"GLASS STREET, Wan Chai",TPU-627-Site-184,"LUARD ROAD, Wan Chai",1276.8,1276.8,1016.8
+Officer_04,"GLASS STREET, Wan Chai",TPU-482-Site-040,"HAPPY VIEW TERRACE, Wan Chai",1299.4,1299.4,1037.0
+Officer_04,"GLASS STREET, Wan Chai",TPU-567-Site-199,"D'AGUILAR STREET, Central and Western",1639.0,1639.0,1215.8
+Officer_04,"GLASS STREET, Wan Chai",TPU-294-Site-163,"TAI PING SHAN STREET, Central and Western",1718.6,1718.6,1235.5
+Officer_04,"GLASS STREET, Wan Chai",TPU-352-Site-019,"DUTCH LANE, Central and Western",1877.1,1877.1,1465.8
+Officer_04,"GLASS STREET, Wan Chai",TPU-318-Site-181,"WHITTY STREET, Central and Western",1882.4,1882.4,1326.4
+Officer_04,"GLASS STREET, Wan Chai",TPU-822-Site-130,"WONG NAI CHUNG ROAD, Wan Chai",2017.8,2017.8,1552.1
+Officer_04,"GLASS STREET, Wan Chai",TPU-472-Site-166,"ILLUMINATION TERRACE, Wan Chai",2829.7,2829.7,1581.5
+Officer_04,"GLASS STREET, Wan Chai",TPU-208-Site-037,"SAI HONG LANE, Central and Western",2931.0,2931.0,2321.2
+Officer_04,"GLASS STREET, Wan Chai",TPU-327-Site-148,"TAI WONG STREET WEST, Wan Chai",3129.8,3129.8,1233.1
+Officer_04,"GLASS STREET, Wan Chai",TPU-258-Site-091,"ROCK HILL STREET, Central and Western",3862.2,3862.2,3190.7
+Officer_04,"GLASS STREET, Wan Chai",TPU-787-Site-055,"OAKLANDS PATH, Central and Western",6829.9,6829.9,1817.2
+Officer_05,"EARL STREET, Kowloon City",TPU-532-Site-078,"CHING SHAN STREET, Yau Tsim Mong",599.1,599.1,45.4
+Officer_05,"EARL STREET, Kowloon City",TPU-421-Site-168,"PINE STREET, Yau Tsim Mong",1328.7,1328.7,656.9
+Officer_05,"EARL STREET, Kowloon City",TPU-100-Site-042,"YUEN PO STREET, Yau Tsim Mong",1742.8,1742.8,643.0
+Officer_05,"EARL STREET, Kowloon City",TPU-702-Site-060,"GATEWAY BOULEVARD, Yau Tsim Mong",2000.1,2000.1,996.9
+Officer_05,"EARL STREET, Kowloon City",TPU-417-Site-186,"QUEEN ELIZABETH HOSPITAL ROAD, Yau Tsim Mong",2625.9,2625.9,1877.0
+Officer_06,"SHUN YEE STREET, Yau Tsim Mong",TPU-873-Site-024,"CENTRAL KOWLOON BYPASS, Yau Tsim Mong",327.1,327.1,173.6
+Officer_06,"SHUN YEE STREET, Yau Tsim Mong",TPU-837-Site-169,"FORTUNE STREET, Sham Shui Po",2966.0,2966.0,2056.2
+Officer_06,"SHUN YEE STREET, Yau Tsim Mong",TPU-914-Site-150,"WAI CHING STREET, Yau Tsim Mong",3052.3,3052.3,2188.2
+Officer_06,"SHUN YEE STREET, Yau Tsim Mong",TPU-195-Site-185,"MING ON STREET, Kowloon City",5721.6,5721.6,1686.4
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-614-Site-096,"MAN SING STREET, Yau Tsim Mong",1008.3,1008.3,338.1
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-600-Site-043,"NGONG SHUNG ROAD, Sham Shui Po",1157.5,1157.5,707.6
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-124-Site-151,"KWONG LEE ROAD, Sham Shui Po",1380.8,1380.8,946.1
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-391-Site-114,"KA SHIN STREET, Yau Tsim Mong",1568.9,1568.9,1163.4
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-158-Site-097,"HING WAH STREET WEST, Sham Shui Po",1624.5,1624.5,1003.4
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-250-Site-187,"KIU YAM STREET, Sham Shui Po",1713.8,1713.8,1209.7
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-172-Site-061,"BEGONIA ROAD, Sham Shui Po",2017.4,2017.4,1408.7
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-573-Site-079,"LUNG YUET ROAD, Sham Shui Po",2477.2,2477.2,1729.3
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-136-Site-133,"YEE KUK WEST STREET, Sham Shui Po",2566.7,2566.7,1879.9
+Officer_07,"CHI NGONG ROAD, Sham Shui Po",TPU-256-Site-025,"FA PO STREET, Sham Shui Po",3419.6,3419.6,2493.9
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",TPU-726-Site-116,"PO FONG LANE, Wong Tai Sin",566.9,566.9,177.7
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",TPU-165-Site-027,"SIN FAT ROAD, Kwun Tong",1315.1,1315.1,527.1
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",TPU-971-Site-098,"FU KEUNG STREET, Wong Tai Sin",3003.5,3003.5,1133.9
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",TPU-723-Site-008,"FOO YUEN STREET, Wong Tai Sin",5613.0,5613.0,2175.2
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",TPU-854-Site-143,"HO CHUNG FOURTH LANE, Sai Kung",6625.9,6625.9,2124.7
+Officer_08,"TSUI FUNG STREET, Wong Tai Sin",TPU-553-Site-080,"FU CHI PATH, Wong Tai Sin",7683.2,7683.2,2426.6
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-750-Site-005,"SHIN LUN LANE , Kowloon City",355.0,355.0,255.4
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-151-Site-095,"CHUK YUEN ROAD, Kowloon City",1823.6,1823.6,599.5
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-696-Site-134,"SHEUNG HEI STREET, Wong Tai Sin",1925.7,1925.7,1394.0
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-652-Site-041,"HING YAN STREET, Kowloon City",3217.3,3217.3,2213.7
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-151-Site-081,"FUK NING ROAD, Kwun Tong",3698.0,3698.0,906.0
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-709-Site-099,"CHONG YIP STREET, Kwun Tong",4570.4,4570.4,2510.8
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-980-Site-063,"CHOI HING LANE, Kwun Tong",5137.4,5137.4,1597.4
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-846-Site-009,"SHING YIP STREET, Kwun Tong",5782.0,5782.0,2713.0
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-873-Site-053,"PO NING ROAD, Sai Kung",6568.0,6568.0,2285.4
+Officer_09,"CHOI HEI ROAD, Kwun Tong",TPU-200-Site-074,"TAIKOO WAN ROAD, Eastern",7416.0,7416.0,4113.4
+Officer_10,"KWAI SHING CIRCUIT, Kwai Tsing",TPU-415-Site-136,"CHEUNG WAN STREET, Kwai Tsing",3838.8,3838.8,489.8
+Officer_10,"KWAI SHING CIRCUIT, Kwai Tsing",TPU-785-Site-065,"MA WAN RURAL COMMITTEE ROAD, Tsuen Wan",6348.6,6348.6,2909.0
+Officer_10,"KWAI SHING CIRCUIT, Kwai Tsing",TPU-222-Site-101,"SHEK WAI KOK ROAD, Tsuen Wan",7635.8,7635.8,3370.2
+Officer_10,"KWAI SHING CIRCUIT, Kwai Tsing",TPU-871-Site-083,"FU WAH STREET, Tsuen Wan",8752.9,8752.9,3656.2
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-710-Site-028,"PO LEI STREET, Kwai Tsing",1221.5,1221.5,533.9
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-813-Site-172,"SHEK LI STREET, Kwai Tsing",1347.1,1347.1,569.3
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-626-Site-064,"CONTAINER PORT ROAD SOUTH, Kwai Tsing",1861.6,1861.6,1140.1
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-370-Site-119,"HILLTOP ROAD, Tsuen Wan",4614.0,4614.0,2110.9
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-982-Site-100,"WING CHONG STREET, Kwai Tsing",5003.6,5003.6,2136.0
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-459-Site-154,"KWONG FAI LANE, Kwai Tsing",5203.8,5203.8,2080.9
+Officer_11,"TSING TSUEN ROAD, Tsuen Wan",TPU-566-Site-190,"CONTAINER PORT ROAD SOUTH, Kwai Tsing",11440.8,11440.8,2660.6
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-796-Site-030,"BOILER ROAD EAST, Tuen Mun",213.2,213.2,78.4
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-324-Site-012,"YUNG LONG ROAD, Tuen Mun",1418.0,1418.0,801.7
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-692-Site-102,"MONG FAT STREET, Tuen Mun",1587.8,1587.8,650.5
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-606-Site-192,"TSING CHUNG KOON ROAD, Tuen Mun",1711.9,1711.9,1050.5
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-780-Site-174,"TSING SIN STREET, Tuen Mun",1787.0,1787.0,997.3
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-884-Site-048,"WU YUET STREET, Tuen Mun",2001.6,2001.6,873.7
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-782-Site-138,"MONG TAT STREET, Tuen Mun",2057.4,2057.4,1252.0
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-860-Site-120,"HO TIN STREET, Tuen Mun",3317.4,3317.4,2377.7
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-270-Site-084,"MAK YUEN WAI ROAD, Tuen Mun",3417.3,3417.3,2335.8
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-652-Site-066,"LOK YI STREET, Tuen Mun",5722.7,5722.7,3911.5
+Officer_12,"CASTLE PEAK ROAD - SO KWUN WAT, Tuen Mun",TPU-439-Site-156,"YAN OI TONG CIRCUIT, Tuen Mun",5917.2,5917.2,1344.9
+Officer_13,"HUNG ON LANE, Yuen Long",TPU-775-Site-049,"FAIRVIEW PARK SECTION M, 4TH STREET, Yuen Long",1439.3,1439.3,846.1
+Officer_13,"HUNG ON LANE, Yuen Long",TPU-898-Site-139,"NAM PIN WAI WESTERN LANE, Yuen Long",3387.4,3387.4,2577.2
+Officer_13,"HUNG ON LANE, Yuen Long",TPU-334-Site-013,"FAIRVIEW PARK 3RD STREET RIVER NORTH, Yuen Long",3560.6,3560.6,2123.3
+Officer_13,"HUNG ON LANE, Yuen Long",TPU-690-Site-067,"YAU CHUEN STREET, Yuen Long",4306.0,4306.0,2902.5
+Officer_13,"HUNG ON LANE, Yuen Long",TPU-868-Site-031,"TOWN PARK ROAD NORTH, Yuen Long",5177.1,5177.1,2654.4
+Officer_13,"HUNG ON LANE, Yuen Long",TPU-251-Site-193,"KIN LOK STREET, Yuen Long",5605.4,5605.4,4022.7
+Officer_14,"WO TAI STREET, North",TPU-694-Site-158,"KAM TSIN 6TH LANE, North",2311.6,2311.6,1598.2
+Officer_14,"WO TAI STREET, North",TPU-315-Site-122,"WAI LOI TSUEN LANE 12, North",3675.7,3675.7,2696.3
+Officer_14,"WO TAI STREET, North",TPU-448-Site-032,"WO LUNG STREET, North",5148.4,5148.4,2745.8
+Officer_14,"WO TAI STREET, North",TPU-903-Site-068,"LIU POK 7TH LANE, North",5952.7,5952.7,3988.8
+Officer_14,"WO TAI STREET, North",TPU-510-Site-014,"MA TSO LUNG ROAD, North",6276.4,6276.4,3661.1
+Officer_14,"WO TAI STREET, North",TPU-269-Site-050,"TAI TAU LENG 2ND LANE, North",6349.1,6349.1,4157.2
+Officer_14,"WO TAI STREET, North",TPU-160-Site-086,"PO SHEUNG TSUEN LANE No.11, North",6559.7,6559.7,4820.3
+Officer_14,"WO TAI STREET, North",TPU-515-Site-176,"LUNG SUM AVENUE, North",7629.3,7629.3,4710.0
+Officer_14,"WO TAI STREET, North",TPU-868-Site-194,"CASTLE PEAK ROAD - CHAU TAU, North",10294.9,10294.9,3926.0
+Officer_14,"WO TAI STREET, North",TPU-773-Site-104,"PO SHEUNG TSUEN LANE No.20, North",10903.4,10903.4,6687.2
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-211-Site-159,"CHEUNG SHUE TAN ROAD, Tai Po",652.9,652.9,453.4
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-993-Site-051,"PO HEUNG LANE, Tai Po",1332.6,1332.6,598.0
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-985-Site-141,"HONG LOK YUEN FIRST STREET, Tai Po",1693.6,1693.6,1097.1
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-316-Site-015,"CHUI WO LANE, Tai Po",5367.0,5367.0,2147.7
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-735-Site-140,"PO SHEUNG TSUEN LANE No.15, North",6211.3,6211.3,4373.4
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-803-Site-123,"HON KA ROAD, Tai Po",7564.4,7564.4,3714.5
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-535-Site-195,"WAI YAN STREET, Tai Po",7809.3,7809.3,3849.4
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-545-Site-033,"HONG LOK YUEN TWENTIETH STREET, Tai Po",7990.5,7990.5,4102.7
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-367-Site-105,"HONG LOK YUEN TWENTY-SECOND STREET, Tai Po",11412.6,11412.6,6319.5
+Officer_15,"HONG LOK YUEN EIGHTH STREET, Tai Po",TPU-393-Site-177,"HONG LOK YUEN TWENTY-FIFTH STREET, Tai Po",25307.3,25307.3,4400.1
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-904-Site-178,"TAI CHUNG KIU ROAD, Sha Tin",1636.8,1636.8,929.3
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-923-Site-196,"KIU HA ROAD, Sha Tin",1937.8,1937.8,1060.7
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-453-Site-160,"TAI PO ROAD - PIPER'S HILL, Sha Tin",4054.8,4054.8,1765.0
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-103-Site-034,"TAK LEE STREET, Sha Tin",5025.3,5025.3,3494.0
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-522-Site-142,"KIU HA ROAD, Sha Tin",5709.8,5709.8,3684.7
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-199-Site-070,"HANG CHI STREET, Sha Tin",6584.4,6584.4,3687.9
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-344-Site-106,"ON YUEN STREET, Sha Tin",8381.4,8381.4,4035.4
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-902-Site-088,"MONTE PATH, Sha Tin",8564.3,8564.3,1145.8
+Officer_16,"NING TAI ROAD, Sha Tin",TPU-516-Site-069,"WONG CHUK YEUNG 3RD LANE, Tai Po",15583.1,15583.1,6804.6
+Officer_17,"WAN KING PATH, Sai Kung",TPU-966-Site-125,"KAK HANG TUN ROAD, Sai Kung",7215.4,7215.4,1192.6
+Officer_17,"WAN KING PATH, Sai Kung",TPU-970-Site-189,"TAI YIP LANE, Kwun Tong",15332.9,15332.9,5211.5
+Officer_17,"WAN KING PATH, Sai Kung",TPU-392-Site-089,"ON YU ROAD, Sai Kung",22580.9,22580.9,2336.5
+Officer_17,"WAN KING PATH, Sai Kung",TPU-421-Site-161,"TAN CHEUNG ROAD, Sai Kung",42594.1,42594.1,2893.3
+Officer_19,"PEAK ROAD, Central and Western",TPU-479-Site-006,"COX'S ROAD, Yau Tsim Mong",1560.7,1560.7,194.8
+Officer_19,"PEAK ROAD, Central and Western",TPU-770-Site-179,"SAI KUNG TAI STREET, Sai Kung",20200.9,20200.9,9918.1
+Officer_20,"KAM HONG STREET, Eastern",TPU-865-Site-094,"CHI SHING LANE, Wan Chai",6968.7,6968.7,1064.4
+Officer_20,"KAM HONG STREET, Eastern",TPU-818-Site-146,"YEE TAI STREET, Eastern",9563.9,9563.9,2081.1
+Officer_20,"KAM HONG STREET, Eastern",TPU-322-Site-092,"KENG SHAN LANE, Eastern",10999.4,10999.4,2743.1
+Officer_20,"KAM HONG STREET, Eastern",TPU-961-Site-038,"KIN WAH STREET, Eastern",32940.0,32940.0,1089.4
+Officer_21,"MAIN STREET, AP LEI CHAU, Southern",TPU-470-Site-022,"SHARP STREET EAST, Wan Chai",10858.8,10858.8,2044.3
+Officer_21,"MAIN STREET, AP LEI CHAU, Southern",TPU-632-Site-165,"ABERDEEN MAIN ROAD, Southern",19215.1,19215.1,3336.1
+Officer_21,"MAIN STREET, AP LEI CHAU, Southern",TPU-676-Site-110,"TAI TAK STREET, Eastern",24488.7,24488.7,4724.2
+Officer_22,"EASTERN HOSPITAL ROAD, Wan Chai",TPU-354-Site-076,"EWIN WAY, Wan Chai",6663.6,6663.6,1052.8
+Officer_22,"EASTERN HOSPITAL ROAD, Wan Chai",TPU-109-Site-109,"CHING LIN TERRACE, Central and Western",9460.4,9460.4,1738.9
+Officer_22,"EASTERN HOSPITAL ROAD, Wan Chai",TPU-548-Site-056,"MODEL LANE, Eastern",31056.6,31056.6,2929.5
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-170-Site-113,"MUK LONG STREET, Kowloon City",1583.0,1583.0,1323.4
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-786-Site-007,"KWAI CHUNG INTERCHANGE, Sham Shui Po",1729.8,1729.8,654.9
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-911-Site-026,"KAM FUNG STREET, Wong Tai Sin",1818.2,1818.2,1095.4
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-471-Site-044,"FUNG SHING STREET, Wong Tai Sin",2342.8,2342.8,1545.1
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-350-Site-188,"CHUI CHUK STREET, Wong Tai Sin",2383.2,2383.2,1414.6
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-334-Site-062,"FEI FUNG STREET, Wong Tai Sin",2917.8,2917.8,2013.3
+Officer_23,"PAK KUNG STREET, Kowloon City",TPU-780-Site-167,"CHUNG SUN STREET, Kowloon City",4663.1,4663.1,2655.2
+Officer_24,"IVY STREET, Yau Tsim Mong",TPU-807-Site-132,"CAMERON ROAD, Yau Tsim Mong",737.0,737.0,469.6
+Officer_24,"IVY STREET, Yau Tsim Mong",TPU-649-Site-077,"HUNG HOM SOUTH ROAD, Kowloon City",1178.8,1178.8,682.6
+Officer_24,"IVY STREET, Yau Tsim Mong",TPU-621-Site-023,"FUNG YI STREET, Kowloon City",1424.1,1424.1,807.6
+Officer_24,"IVY STREET, Yau Tsim Mong",TPU-458-Site-149,"SHING FUNG LANE, Kowloon City",2914.8,2914.8,452.8
+Officer_24,"IVY STREET, Yau Tsim Mong",TPU-619-Site-170,"PING TING ROAD EAST, Wong Tai Sin",3425.6,3425.6,2327.1
+Officer_25,"LUNG CHU STREET, Sham Shui Po",TPU-702-Site-059,"BRAGA CIRCUIT, Kowloon City",2566.9,2566.9,540.4
+Officer_25,"LUNG CHU STREET, Sham Shui Po",TPU-953-Site-115,"TO YUEN STREET, Sham Shui Po",3765.8,3765.8,1041.2
+Officer_25,"LUNG CHU STREET, Sham Shui Po",TPU-109-Site-131,"WAI WAN LANE, Kowloon City",5591.1,5591.1,2812.1
+Officer_25,"LUNG CHU STREET, Sham Shui Po",TPU-317-Site-016,"PAI TAU STREET, Sha Tin",5638.5,5638.5,2726.2
+Officer_25,"LUNG CHU STREET, Sham Shui Po",TPU-508-Site-152,"LION ROCK TUNNEL ROAD, Wong Tai Sin",5776.1,5776.1,1559.4
+Officer_26,"CHUI CHUK STREET, Wong Tai Sin",TPU-617-Site-124,"MONTE PATH, Sha Tin",19481.3,19481.3,2113.0
+Officer_26,"CHUI CHUK STREET, Wong Tai Sin",TPU-316-Site-052,"SUI CHEUNG STREET, Sha Tin",26620.3,26620.3,2859.9
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-462-Site-071,"NGAN YING ROAD, Sai Kung",76.4,76.4,64.4
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-985-Site-153,"KO FAI ROAD, Kwun Tong",5606.9,5606.9,738.4
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-505-Site-017,"PIK SHA ROAD, Sai Kung",5634.9,5634.9,501.5
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-234-Site-107,"MO YING ROAD, Sai Kung",6443.2,6443.2,954.4
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-159-Site-045,"KAI TIN ROAD, Kwun Tong",8878.5,8878.5,1536.3
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-518-Site-171,"TSUN YIP LANE, Kwun Tong",9333.4,9333.4,1366.0
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-540-Site-135,"HOI YUEN ROAD, Kwun Tong",10228.8,10228.8,1541.0
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-996-Site-035,"SILVER CAPE ROAD, Sai Kung",10494.9,10494.9,1704.1
+Officer_27,"SHUI NING STREET, Kwun Tong",TPU-783-Site-117,"CHA KWO LING ROAD, Kwun Tong",11028.3,11028.3,1163.4
+Officer_28,"PING LAI PATH, Kwai Tsing",TPU-466-Site-137,"CHEUNG SHAN ESTATE ROAD EAST, Tsuen Wan",21245.5,21245.5,3721.6
+Officer_28,"PING LAI PATH, Kwai Tsing",TPU-795-Site-155,"SHEK ON STREET, Tsuen Wan",28798.0,28798.0,4216.1
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-689-Site-191,"YEE WAI PATH, Tsuen Wan",1372.7,1372.7,821.2
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-573-Site-010,"KWAI FAT ROAD, Kwai Tsing",1508.7,1508.7,769.0
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-935-Site-047,"TEXACO ROAD NORTH, Tsuen Wan",1675.5,1675.5,972.6
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-779-Site-118,"LAI KING HILL ROAD, Kwai Tsing",1845.8,1845.8,1183.7
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-180-Site-046,"TSING MUI STREET, Kwai Tsing",2133.4,2133.4,1219.4
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-956-Site-082,"TSING HUNG ROAD, Kwai Tsing",2288.1,2288.1,760.7
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-230-Site-173,"TSUEN WAN ROAD, Tsuen Wan",2663.7,2663.7,1701.5
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-357-Site-029,"TSUEN KING CIRCUIT, Tsuen Wan",2989.9,2989.9,1137.5
+Officer_29,"TSUEN WAN ROAD, Tsuen Wan",TPU-755-Site-011,"MA WAN MAIN STREET, Tsuen Wan",4086.0,4086.0,1278.9
+Officer_30,"TIN KING ROAD, Tuen Mun",TPU-734-Site-103,"CHUN SHIN ROAD, Yuen Long",2557.4,2557.4,1682.1
+Officer_30,"TIN KING ROAD, Tuen Mun",TPU-378-Site-121,"FUNG HEUNG STREET, Yuen Long",4326.2,4326.2,3549.3
+Officer_30,"TIN KING ROAD, Tuen Mun",TPU-730-Site-175,"GOLDEN BAMBOO ROAD NORTH, Yuen Long",5902.5,5902.5,4610.8
+Officer_30,"TIN KING ROAD, Tuen Mun",TPU-592-Site-085,"STAFFORDSHIRE AVENUE, Yuen Long",6466.3,6466.3,4982.0
+Officer_30,"TIN KING ROAD, Tuen Mun",TPU-998-Site-157,"FAIRVIEW PARK SECTION K, 1ST STREET, Yuen Long",6985.2,6985.2,5593.5
