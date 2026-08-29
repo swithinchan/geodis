@@ -1,4 +1,4 @@
-# geodis — Hong Kong Fieldwork Allocation & Pedestrian-Network Routing Engine
+# geodis — Hong Kong Logistics Assignments & Pedestrian-Network Routing Engine
 
 **A C++20 engine that allocates logistics to recipient addresses across
 Hong Kong's 18 districts, and produces turn-by-turn walking itineraries that
