@@ -1,6 +1,6 @@
 # geodis — Hong Kong Fieldwork Allocation & Pedestrian-Network Routing Engine
 
-**A C++20 engine that allocates fieldwork officers to survey addresses across
+**A C++20 engine that allocates logistics to recipient addresses across
 Hong Kong's 18 districts, and produces turn-by-turn walking itineraries that
 strictly follow the Lands Department 3D Pedestrian Network.**
 
@@ -14,23 +14,23 @@ Road Centreline dataset.
 
 ## 1. Cluster allocation algorithm
 
-Officers are allocated addresses with a **greedy balanced clustering**
+Delivery workers are allocated addresses with a **greedy balanced clustering**
 algorithm (`--mode cluster`):
 
-1. **Snap** every officer and survey address to its nearest pedestrian-network
+1. **Snap** every delivery worker and recipient address to its nearest pedestrian-network
    node using an R-tree spatial index.
-2. **Build a full distance matrix** — one parallelised Dijkstra per officer
-   (TBB) gives the network walking cost from that officer to every address.
-3. **Assign each address** to the officer that minimises the penalised score:
+2. **Build a full distance matrix** — one parallelised Dijkstra per delivery worker
+   (TBB) gives the network walking cost from that delivery worker to every address.
+3. **Assign each address** to the delivery worker that minimises the penalised score:
 
 ```
 score[o] = walking_cost[o][s] × (1 + load_penalty × assigned_count[o])
 ```
 
-   where `assigned_count[o]` is how many addresses officer `o` already has, and
+   where `assigned_count[o]` is how many addresses delivery worker `o` already has, and
    `load_penalty` defaults to **0.15** (each existing assignment adds a 15%
    distance penalty). This keeps workloads balanced instead of dumping every
-   address on the nearest officer.
+   address on the nearest delivery worker.
 
 4. **Route geometry + narrative** are produced for every assignment by
    reconstructing the shortest path and merging consecutive edges of the same
@@ -77,7 +77,7 @@ available via `--mode hungarian` / `--mode greedy`.
 
 Measured on a 20-core machine (TBB enabled) against the full 1.43M-node graph.
 
-**Benchmark (measured): 30 officers × 200 addresses across 18 districts**
+**Benchmark (measured): 30 delivery workers × 200 addresses across 18 districts**
 
 | Stage | Time |
 |---|---|
@@ -89,11 +89,11 @@ Measured on a 20-core machine (TBB enabled) against the full 1.43M-node graph.
 
 **Projected scaling (the "sorting time" table)**
 
-The distance matrix scales with the number of officers (parallelised), while
+The distance matrix scales with the number of delivery workers (parallelised), while
 the per-address shortest paths scale with the number of addresses (currently
 sequential at ~15 ms each) plus GeoJSON writing.
 
-| Officers | Addresses | Estimated wall-clock |
+| delivery workers | Addresses | Estimated wall-clock |
 |---|---|---|
 | 30 | 200 | ~5 s (measured) |
 | 100 | 1,000 | ~25 s |
@@ -104,7 +104,7 @@ sequential at ~15 ms each) plus GeoJSON writing.
 **Bottleneck & speed-up:** the per-address shortest-path loop is sequential.
 Applying the same TBB parallel pattern used for the distance matrix cuts that
 stage by ~20×, bringing the 500 × 15,000 case from ~8–9 min down to **~2 min**.
-For that scale, output should be split per officer (the single GeoJSON reaches
+For that scale, output should be split per delivery worker (the single GeoJSON reaches
 ~4 GB at 15,000 routes) or written to a database/vector tiles.
 
 ---
@@ -121,15 +121,15 @@ python3 scripts/serve.py 8765
 
 **Steps:**
 
-1. Click an officer in the **left itinerary panel**.
+1. Click an delivery worker in the **left itinerary panel**.
 2. **Wait ~30 seconds** for the 3D buildings to load from the Overpass API
    (they are fetched per viewport on the first pan/zoom).
-3. The map shows the officer's routes on the 3D terrain, with 3D buildings,
+3. The map shows the delivery worker's routes on the 3D terrain, with 3D buildings,
    and the left panel shows each site's **"🚶 Directions"** — the turn-by-turn
    walking narrative by footway / stairs / lift / escalator / footbridge /
    subway / crossing.
 
-![Officer itinerary in the 3D viewer](docs/districts/3d_officer01.png)
+![delivery worker itinerary in the 3D viewer](docs/districts/3d_delivery worker01.png)
 
 Toolbar toggles: 🛤️ routes · ▶ direction arrows · 🚶 full pedestrian network ·
 🏷️ street names · 🏢 3D buildings · ⛰️ terrain · 📍 sites.
@@ -149,13 +149,13 @@ python3 scripts/preprocess.py data/pedestrian_route.json -o data/graph.bin
 # 3. Group real street names by the 18 districts (from the government Road Centreline)
 python3 scripts/build_street_districts.py
 
-# 4. Generate 30 officers + 200 addresses across 18 districts
+# 4. Generate 30 delivery workers + 200 addresses across 18 districts
 python3 scripts/generate_district_data.py
 
 # 5. Run the balanced cluster allocation
 ./build_native/geodis \
   --graph data/graph.bin \
-  --officers data/test_officers_30.csv \
+  --delivery workers data/test_delivery workers_30.csv \
   --sites data/test_sites_200.csv \
   --mode cluster \
   --cluster-penalty 0.15 \
@@ -185,7 +185,7 @@ geodis/
 ├── scripts/
 │   ├── preprocess.py                   # GeoJSON → binary graph
 │   ├── build_street_districts.py       # group Road Centreline names by district
-│   ├── generate_district_data.py       # 18-district officers + addresses
+│   ├── generate_district_data.py       # 18-district delivery workers + addresses
 │   ├── generate_network_data.py        # compact browser network.bin
 │   ├── serve.py                        # local HTTP server
 │   └── *.html                          # 3D/2D web viewers
